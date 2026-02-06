@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Fuel Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Endurance Fuel Calculator</h1>
+        <p class="subtitle">Plan your nutrition strategy for endurance events based on your personal targets</p>
+
+        <div class="section">
+            <h2>Event & Hourly Target Settings</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div class="input-group">
+                    <label>Event Duration (hours)</label>
+                    <input type="number" id="duration" value="4" min="0.5" step="0.5">
+                </div>
+                <div class="input-group">
+                    <label>Target Carbs (g/hour)</label>
+                    <input type="number" id="targetCarbs" value="60" min="0" step="5">
+                </div>
+                <div class="input-group">
+                    <label>Target Sodium (mg/hour)</label>
+                    <input type="number" id="targetSodium" value="500" min="0" step="50">
+                </div>
+                <div class="input-group">
+                    <label>Caffeine Strategy</label>
+                    <button onclick="toggleCaffeineStrategy()" id="caffeineToggleBtn" style="width: 100%; background: #0C1B33;">
+                        <i class="fa-solid fa-plus"></i> Add Caffeine
+                    </button>
+                </div>
+            </div>
+            
+            <div id="caffeineSettings" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 6px; border: 2px solid #28a745;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="margin: 0; color: #333; font-size: 1.1em;">Caffeine Strategy</h3>
+                    <button onclick="toggleCaffeineStrategy()" class="btn-small btn-danger">Remove</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                    <div class="input-group">
+                        <label>Caffeine Interval (hours)</label>
+                        <input type="number" id="caffeineInterval" value="2" min="0.5" step="0.5" placeholder="e.g., 2">
+                        <small style="color: #666;">How often you want caffeine</small>
+                    </div>
+                    <div class="input-group">
+                        <label>Caffeine per Dose (mg)</label>
+                        <input type="number" id="caffeinePerDose" value="100" min="0" step="25">
+                        <small style="color: #666;">Target caffeine amount each time</small>
+                    </div>
+                </div>
+                <div id="caffeineCalc" style="padding: 15px; background: #f8f9fa; border-radius: 6px; font-size: 0.95em; color: #666;">
+                    <strong>Caffeine Plan:</strong> <span id="caffeinePlanText">2 doses of 100mg throughout your event</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 6px;">
+                <h3 style="margin-bottom: 10px; color: #333; font-size: 1.1em;">Total Event Goals</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; font-size: 0.95em; color: #666;">
+                    <div><strong>Total Carbs:</strong> <span id="goalCarbs">240g</span></div>
+                    <div><strong>Total Sodium:</strong> <span id="goalSodium">2000mg</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; cursor: pointer;" onclick="toggleProductsSection()">
+                <h2 style="margin: 0;">Available Fuel Products</h2>
+                <span id="productsSectionToggle" style="font-size: 1.5em; color: #0C1B33;"><i class="fa-solid fa-bars"></i></span>
+            </div>
+            
+            <div id="productsSection">
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
+                    <div style="flex: 1; position: relative;">
+                        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #999;"></i>
+                        <input type="text" id="productSearch" placeholder="Search products..." style="width: 100%; padding-left: 40px;">
+                    </div>
+                    <div style="color: #666; font-size: 0.9em;">
+                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i> Click star to favorite
+                    </div>
+                </div>
+                
+                <div style="max-height: 500px; overflow-y: auto; padding-right: 5px;">
+                    <div class="product-grid" id="productGrid"></div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <button onclick="toggleCustomProduct()" id="customProductToggleBtn" style="width: 100%; background: #0C1B33;">
+                        <i class="fa-solid fa-plus"></i> Add Custom Product
+                    </button>
+                </div>
+
+                <div id="customProductForm" style="display: none; margin-top: 15px; padding: 20px; background: white; border-radius: 6px; border: 2px solid #0C1B33;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin: 0; color: #333; font-size: 1.1em;"><i class="fa-solid fa-plus"></i> Add Custom Product</h3>
+                        <button onclick="toggleCustomProduct()" class="btn-small btn-danger">Cancel</button>
+                    </div>
+                    <div class="custom-form">
+                        <input type="text" id="customName" placeholder="Product name">
+                        <input type="number" id="customCarbs" placeholder="Carbs (g)" min="0">
+                        <input type="number" id="customSodium" placeholder="Sodium (mg)" min="0">
+                        <input type="number" id="customPotassium" placeholder="Potassium (mg)" min="0">
+                        <input type="number" id="customCaffeine" placeholder="Caffeine (mg)" min="0">
+                        <button onclick="addCustomProduct()" class="btn-small">Add Product</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Your Fuel Plan</h2>
+            <div id="fuelPlan">
+                <p style="color: #999; text-align: center; padding: 20px;">Add products to build your fuel plan</p>
+            </div>
+        </div>
+
+        <div class="summary" id="summary" style="display: none;">
+            <h3>Nutrition Summary</h3>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="margin-bottom: 10px; font-size: 1em; opacity: 0.9;">Per Hour</h4>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">Carbohydrates</div>
+                        <div class="summary-value" id="totalCarbs">0g</div>
+                        <div class="summary-target" id="carbsTarget"></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Sodium</div>
+                        <div class="summary-value" id="totalSodium">0mg</div>
+                        <div class="summary-target" id="sodiumTarget"></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Potassium</div>
+                        <div class="summary-value" id="totalPotassium">0mg</div>
+                        <div class="summary-target"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px;">
+                <h4 style="margin-bottom: 10px; font-size: 1em; opacity: 0.9;">Total Event</h4>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">Total Carbs</div>
+                        <div class="summary-value" id="totalEventCarbs">0g</div>
+                        <div class="summary-target" id="eventCarbsTarget"></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total Sodium</div>
+                        <div class="summary-value" id="totalEventSodium">0mg</div>
+                        <div class="summary-target" id="eventSodiumTarget"></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total Potassium</div>
+                        <div class="summary-value" id="totalEventPotassium">0mg</div>
+                    </div>
+                    <div class="summary-item" id="caffeineSection" style="display: none;">
+                        <div class="summary-label">Caffeine</div>
+                        <div class="summary-value" id="totalCaffeine">0mg</div>
+                        <div class="summary-target" id="caffeineTarget"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
