@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Running Fuel Calculator</title>
+    <title>Endurance Fuel Planner</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Endurance Fuel Calculator</h1>
-        <p class="subtitle">Plan your nutrition strategy for endurance events based on your personal targets</p>
+        <h1>Endurance Fuel Planner</h1>
+        <p class="subtitle">Plan your nutrition strategy for endurance events based on your personal targets.</p>
 
         <div class="section">
             <h2>Event & Hourly Target Settings</h2>
@@ -35,7 +35,7 @@
                 </div>
             </div>
             
-            <div id="caffeineSettings" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 6px; border: 2px solid #28a745;">
+            <div id="caffeineSettings" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 6px; border: 2px solid #0C1B33;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <h3 style="margin: 0; color: #333; font-size: 1.1em;">Caffeine Strategy</h3>
                     <button onclick="toggleCaffeineStrategy()" class="btn-small btn-danger">Remove</button>
@@ -55,7 +55,7 @@
                 <div id="caffeineCalc" style="padding: 15px; background: #f8f9fa; border-radius: 6px; font-size: 0.95em; color: #666;">
                     <strong>Caffeine Plan:</strong> <span id="caffeinePlanText">2 doses of 100mg throughout your event</span>
                 </div>
-            </div>
+            </div> 
 
             <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 6px;">
                 <h3 style="margin-bottom: 10px; color: #333; font-size: 1.1em;">Total Event Goals</h3>
@@ -64,12 +64,32 @@
                     <div><strong>Total Sodium:</strong> <span id="goalSodium">2000mg</span></div>
                 </div>
             </div>
+
+            <div style="margin-top: 15px;">
+                <button onclick="toggleMultiLegPlanning()" id="multiLegToggleBtn" style="width: 100%; background: #6610f2;">
+                    <i class="fa-solid fa-route"></i> Enable Multi-Leg Planning
+                </button>
+            </div>
+
+            <div id="multiLegSettings" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 6px; border: 2px solid #6610f2;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="margin: 0; color: #333; font-size: 1.1em;"><i class="fa-solid fa-route"></i> Leg Configuration</h3>
+                    <button onclick="toggleMultiLegPlanning()" class="btn-small btn-danger">Disable</button>
+                </div>
+                <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Set up your event legs here, then drag fuel between them in the fuel plan section below.</p>
+                <div id="legsConfigContainer"></div>
+                <button onclick="addLeg()" style="width: 100%; margin-top: 10px; background: #6610f2;">
+                    <i class="fa-solid fa-plus"></i> Add Leg
+                </button>
+            </div>
+
+
         </div>
 
         <div class="section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; cursor: pointer;" onclick="toggleProductsSection()">
                 <h2 style="margin: 0;">Available Fuel Products</h2>
-                <span id="productsSectionToggle" style="font-size: 1.5em; color: #0C1B33;"><i class="fa-solid fa-bars"></i></span>
+                <span id="productsSectionToggle" style="font-size: 1.5em; color: #667eea;"><i class="fa-solid fa-chevron-down"></i></span>
             </div>
             
             <div id="productsSection">
@@ -111,10 +131,13 @@
         </div>
 
         <div class="section">
-            <h2>Your Fuel Plan</h2>
-            <div id="fuelPlan">
-                <p style="color: #999; text-align: center; padding: 20px;">Add products to build your fuel plan</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0;">Your Fuel Plan</h2>
+                <button onclick="downloadFuelPlan()" style="background: #0C1B33;">
+                    <i class="fa-solid fa-download"></i> Download Plan
+                </button>
             </div>
+            <div id="fuelPlanContainer"></div>
         </div>
 
         <div class="summary" id="summary" style="display: none;">
