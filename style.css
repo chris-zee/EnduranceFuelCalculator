@@ -5,16 +5,15 @@
 }
 
 body {
-    font-family: Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: linear-gradient(135deg, #2C5530 0%, #5DAC65 100%);
-    min-height: 100vh;
     padding: 20px;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background: white;
+    background: #D7EAD9;
     border-radius: 16px;
     padding: 30px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
@@ -23,13 +22,15 @@ body {
 h1 {
     color: #333;
     margin-bottom: 10px;
-    font-size: 2em;
+    font-size: 3em;
+    text-align: center;
 }
 
 .subtitle {
-    color: #666;
+    color: #333;
     margin-bottom: 30px;
-    font-size: 0.95em;
+    font-size: 1.2em;
+    text-align: center;
 }
 
 .section {
@@ -73,7 +74,7 @@ input[type="number"]:focus,
 input[type="text"]:focus,
 select:focus {
     outline: none;
-    border-color: #0081A7;
+    border-color: #56CBF9;
 }
 
 .product-grid {
@@ -113,18 +114,19 @@ div[style*="overflow-y: auto"]::-webkit-scrollbar-thumb:hover {
 }
 
 .product-card:hover {
-    border-color: #0081A7;
+    border-color: #56CBF9;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
 .product-card.selected {
-    border-color: #0081A7;
+    border-color: #56CBF9;
     background: #d4edda;
 }
 
 .product-card.favorited {
     border-color: #ffc107;
+    background: #fff9e6;
 }
 
 .favorite-star {
@@ -162,7 +164,7 @@ div[style*="overflow-y: auto"]::-webkit-scrollbar-thumb:hover {
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 6px;
-    border-left: 4px solid #0081A7;
+    border-left: 4px solid #56CBF9;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -195,7 +197,7 @@ div[style*="overflow-y: auto"]::-webkit-scrollbar-thumb:hover {
 }
 
 button {
-    background: #0081A7;
+    background: #56CBF9;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -223,7 +225,7 @@ button:hover {
 }
 
 .summary {
-    background: linear-gradient(135deg, #0081A7 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #01295F 0%, #2F3061 100%);
     color: white;
     padding: 20px;
     border-radius: 8px;
@@ -313,4 +315,196 @@ button:hover {
     border-radius: 4px;
     color: #155724;
     font-size: 0.9em;
+}
+
+.leg-card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 2px solid #6610f2;
+}
+
+.leg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.leg-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.leg-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.leg-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.leg-fuel-plan {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.leg-summary {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.active-leg {
+    border: 2px solid #56CBF9;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.leg-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.leg-tab {
+    padding: 10px 20px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.leg-tab:hover {
+    border-color: #56CBF9;
+}
+
+.leg-tab.active {
+    background: #56CBF9;
+    color: white;
+    border-color: #56CBF9;
+}
+
+.fuel-item[draggable="true"] {
+    cursor: move;
+}
+
+.fuel-item[draggable="true"]:hover {
+    background: #f8f9fa;
+}
+
+.leg-card.drag-over {
+    border-color: #28a745;
+    background: #f0fff4;
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.3);
+    transform: scale(1.02);
+}
+
+.leg-fuel-card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s;
+}
+
+.leg-fuel-card:hover {
+    border-color: #56CBF9;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.leg-fuel-card.active-leg-fuel {
+    border-color: #56CBF9;
+    background: #f8f9ff;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.leg-fuel-card.drag-over {
+    border-color: #28a745;
+    background: #f0fff4;
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.3);
+    transform: scale(1.01);
+}
+
+.leg-fuel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.leg-fuel-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 10px 0;
+    font-size: 0.9em;
+    color: #666;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 15px;
+}
+
+.leg-fuel-items {
+    min-height: 80px;
+}
+
+.fuel-item-compact {
+    background: #f8f9fa;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+    cursor: move;
+}
+
+.fuel-item-compact:hover {
+    background: #e9ecef;
+    border-color: #56CBF9;
+}
+
+.leg-nutrition-bar {
+    background: linear-gradient(135deg,  #01295F 0%, #2F3061 100%);
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.leg-nutrition-item.target-met {
+    background: rgba(40, 167, 69, 0.4);
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.leg-nutrition-item.target-low {
+    background: rgba(255, 193, 7, 0.4);
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.leg-nutrition-item.target-very-low {
+    background: rgba(220, 53, 69, 0.4);
+    border-radius: 4px;
+    padding: 4px;
 }
