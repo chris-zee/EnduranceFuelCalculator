@@ -7,13 +7,14 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: linear-gradient(135deg, #2C5530 0%, #5DAC65 100%);
+    min-height: 100vh;
     padding: 20px;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background: #D7EAD9;
+    background: white;
     border-radius: 16px;
     padding: 30px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
@@ -22,15 +23,13 @@ body {
 h1 {
     color: #333;
     margin-bottom: 10px;
-    font-size: 3em;
-    text-align: center;
+    font-size: 2em;
 }
 
 .subtitle {
-    color: #333;
+    color: #666;
     margin-bottom: 30px;
-    font-size: 1.2em;
-    text-align: center;
+    font-size: 0.95em;
 }
 
 .section {
@@ -126,7 +125,6 @@ div[style*="overflow-y: auto"]::-webkit-scrollbar-thumb:hover {
 
 .product-card.favorited {
     border-color: #ffc107;
-    background: #fff9e6;
 }
 
 .favorite-star {
@@ -197,7 +195,7 @@ div[style*="overflow-y: auto"]::-webkit-scrollbar-thumb:hover {
 }
 
 button {
-    background: #56CBF9;
+    background: #089DD9;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -208,7 +206,22 @@ button {
 }
 
 button:hover {
-    background: #5568d3;
+    background: #13B6F6;
+}
+
+.primaryButton {
+    background: #0C1B33;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.3s;
+}
+
+.primaryButton:hover {
+    background: #132C53;
 }
 
 .btn-small {
@@ -263,6 +276,11 @@ button:hover {
 .summary-item.target-very-low {
     background: rgba(220, 53, 69, 0.3);
     border: 2px solid rgba(220, 53, 69, 0.5);
+}
+
+.summary-item.target-exceeded {
+    background: rgba(255, 107, 107, 0.3);
+    border: 2px solid rgba(255, 107, 107, 0.5);
 }
 
 .summary-label {
@@ -484,7 +502,7 @@ button:hover {
 }
 
 .leg-nutrition-bar {
-    background: linear-gradient(135deg,  #01295F 0%, #2F3061 100%);
+    background: linear-gradient(135deg, #56CBF9 0%, #764ba2 100%);
     color: white;
     padding: 12px;
     border-radius: 6px;
@@ -507,4 +525,440 @@ button:hover {
     background: rgba(220, 53, 69, 0.4);
     border-radius: 4px;
     padding: 4px;
+}
+
+.leg-nutrition-item.target-exceeded {
+    background: rgba(255, 107, 107, 0.4);
+    border-radius: 4px;
+    padding: 4px;
+}
+
+/* Leg Configuration Styles */
+.leg-config-card {
+    background: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: 2px solid #e0e0e0;
+}
+
+.leg-config-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.leg-config-name {
+    flex: 1;
+    min-width: 150px;
+}
+
+.leg-config-input {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.leg-config-name input {
+    font-weight: 500;
+}
+
+.leg-config-field {
+    width: 120px;
+}
+
+.leg-config-label {
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 3px;
+    display: block;
+}
+
+.leg-config-controls {
+    display: flex;
+    gap: 8px;
+}
+
+/* Leg Fuel Card Styles */
+.leg-fuel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.leg-fuel-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.leg-name {
+    font-weight: 600;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.leg-meta {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.leg-active-badge {
+    color: #56CBF9;
+    font-size: 0.9em;
+}
+
+.leg-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Nutrition Bar Styles */
+.leg-nutrition-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    padding: 12px;
+    background: linear-gradient(135deg,  #01295F 0%, #2F3061 100%);
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.nutrition-metric {
+    text-align: center;
+    color: white;
+}
+
+.nutrition-label {
+    font-size: 0.75em;
+    opacity: 0.9;
+}
+
+.nutrition-value {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.nutrition-target {
+    font-size: 0.7em;
+    opacity: 0.8;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-title {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.modal-description {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.modal-options {
+    margin-bottom: 20px;
+}
+
+.modal-checkbox-label {
+    display: block;
+    padding: 10px;
+    margin-bottom: 8px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.modal-checkbox-label input {
+    margin-right: 10px;
+}
+
+.modal-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.modal-option input {
+    margin-right: 10px;
+}
+
+.modal-option-text {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-cancel {
+    background: #6c757d;
+}
+
+.btn-confirm {
+    background: #56CBF9;
+}
+
+/* Fuel Item Styles */
+.fuel-item-info {
+    flex: 1;
+}
+
+.fuel-item-name {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.fuel-item-stats {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.fuel-item-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Fuel Item Compact (for legs) */
+.fuel-item-compact-layout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.fuel-item-compact-info {
+    flex: 1;
+}
+
+.fuel-item-compact-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.fuel-item-compact-stats {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.fuel-item-compact-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.grip-handle {
+    color: #999;
+}
+
+/* Product Card Styles */
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.product-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.product-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 0;
+    color: #ffc107;
+}
+
+.favorite-btn.unfavorited {
+    color: #ddd;
+}
+
+.product-nutrition {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.nutrition-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Empty State */
+.empty-state {
+    color: #999;
+    text-align: center;
+    padding: 20px;
+}
+
+.empty-state-sm {
+    font-size: 0.9em;
+}
+
+/* Header with Action */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.section-header h2 {
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .section-header button {
+        width: 100%;
+    }
+    
+    .leg-config-layout {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .leg-config-field {
+        width: 100%;
+    }
+    
+    .leg-nutrition-bar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .leg-fuel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .leg-controls {
+        width: 100%;
+    }
+    
+    .fuel-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .fuel-item-controls {
+        margin-top: 10px;
+        justify-content: flex-start;
+    }
+    
+    .fuel-item-compact {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .fuel-item-compact-layout {
+        margin-bottom: 10px;
+    }
+    
+    .fuel-item-compact-controls {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .fuel-item-compact-controls .qty-input {
+        flex: 0 0 60px;
+    }
+    
+    .fuel-item-compact-controls .btn-small {
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .leg-nutrition-bar {
+        grid-template-columns: 1fr;
+    }
+    
+    .product-nutrition {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .fuel-item-controls {
+        flex-direction: row;
+        gap: 8px;
+    }
+    
+    .fuel-item-controls .qty-input {
+        flex: 1;
+        min-width: 60px;
+    }
+    
+    .fuel-item-controls .btn-small {
+        flex: 0 0 auto;
+        min-width: 80px;
+    }
+    
+    .fuel-item-compact-controls {
+        justify-content: space-between;
+    }
+    
+    .fuel-item-compact-controls .qty-input {
+        flex: 1;
+        min-width: 60px;
+        max-width: 80px;
+    }
+    
+    .fuel-item-compact-controls .btn-small {
+        flex: 0 0 auto;
+        min-width: 80px;
+    }
 }
