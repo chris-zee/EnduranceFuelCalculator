@@ -1,0 +1,107 @@
+[
+  {
+    "name": "GU Energy Gel",
+    "carbs": 22,
+    "sodium": 55,
+    "potassium": 35,
+    "caffeine": 0
+  },
+  {
+    "name": "GU Energy Gel (Caffeine)",
+    "carbs": 22,
+    "sodium": 55,
+    "potassium": 35,
+    "caffeine": 40
+  },
+  {
+    "name": "Maurten Gel 100",
+    "carbs": 25,
+    "sodium": 42,
+    "potassium": 10,
+    "caffeine": 0
+  },
+  {
+    "name": "Maurten Gel 100 CAF 100",
+    "carbs": 25,
+    "sodium": 42,
+    "potassium": 10,
+    "caffeine": 100
+  },
+  {
+    "name": "SIS Go Isotonic Energy Gel",
+    "carbs": 22,
+    "sodium": 20,
+    "potassium": 10,
+    "caffeine": 0
+  },
+  {
+    "name": "Tailwind Endurance Fuel (1 scoop)",
+    "carbs": 25,
+    "sodium": 115,
+    "potassium": 45,
+    "caffeine": 0
+  },
+  {
+    "name": "Tailwind Caffeinated (1 scoop)",
+    "carbs": 25,
+    "sodium": 115,
+    "potassium": 45,
+    "caffeine": 35
+  },
+  {
+    "name": "Honey Stinger Energy Gel",
+    "carbs": 24,
+    "sodium": 50,
+    "potassium": 15,
+    "caffeine": 0
+  },
+  {
+    "name": "Clif Shot Energy Gel",
+    "carbs": 24,
+    "sodium": 90,
+    "potassium": 20,
+    "caffeine": 0
+  },
+  {
+    "name": "Clif Shot Energy Gel (Caffeine)",
+    "carbs": 24,
+    "sodium": 90,
+    "potassium": 20,
+    "caffeine": 50
+  },
+  {
+    "name": "Spring Energy Gel",
+    "carbs": 22,
+    "sodium": 80,
+    "potassium": 50,
+    "caffeine": 0
+  },
+  {
+    "name": "Huma Chia Energy Gel",
+    "carbs": 21,
+    "sodium": 50,
+    "potassium": 55,
+    "caffeine": 0
+  },
+  {
+    "name": "SaltStick Caps",
+    "carbs": 0,
+    "sodium": 215,
+    "potassium": 63,
+    "caffeine": 0
+  },
+  {
+    "name": "Banana (medium)",
+    "carbs": 27,
+    "sodium": 1,
+    "potassium": 422,
+    "caffeine": 0
+  },
+  {
+    "name": "Stroopwafel",
+    "carbs": 21,
+    "sodium": 100,
+    "potassium": 20,
+    "caffeine": 0
+  }
+]
