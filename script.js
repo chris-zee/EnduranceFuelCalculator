@@ -1,21 +1,3 @@
-const products = [
-    { name: "GU Energy Gel", carbs: 22, sodium: 55, potassium: 35, caffeine: 0 },
-    { name: "GU Energy Gel (Caffeine)", carbs: 22, sodium: 55, potassium: 35, caffeine: 40 },
-    { name: "Maurten Gel 100", carbs: 25, sodium: 35, potassium: 10, caffeine: 0 },
-    { name: "SIS Isotonic Gel", carbs: 22, sodium: 20, potassium: 10, caffeine: 0 },
-    { name: "Honey Stinger Gel", carbs: 24, sodium: 60, potassium: 15, caffeine: 0 },
-    { name: "Spring Energy Gel", carbs: 20, sodium: 100, potassium: 50, caffeine: 0 },
-    { name: "Huma Chia Gel", carbs: 21, sodium: 80, potassium: 40, caffeine: 0 },
-    { name: "Clif Shot Bloks (3 pieces)", carbs: 24, sodium: 70, potassium: 20, caffeine: 0 },
-    { name: "Skratch Energy Chews (4 pieces)", carbs: 24, sodium: 100, potassium: 25, caffeine: 0 },
-    { name: "Tailwind (1 scoop)", carbs: 25, sodium: 303, potassium: 88, caffeine: 0 },
-    { name: "UCAN Edge Gel", carbs: 20, sodium: 110, potassium: 45, caffeine: 0 },
-    { name: "SaltStick Caps (1 capsule)", carbs: 0, sodium: 215, potassium: 63, caffeine: 0 },
-    { name: "Banana (medium)", carbs: 27, sodium: 1, potassium: 422, caffeine: 0 },
-    { name: "Date (2 pieces)", carbs: 18, sodium: 0, potassium: 120, caffeine: 0 },
-    { name: "Stroopwafel", carbs: 21, sodium: 100, potassium: 20, caffeine: 0 },
-];
-
 let fuelPlan = [];
 let caffeineEnabled = false;
 let customProductFormVisible = false;
@@ -25,6 +7,76 @@ let productsSectionVisible = true;
 let multiLegEnabled = false;
 let legs = [];
 let activeLegIndex = 0;
+let products = []; // Will be loaded from JSON
+
+// Load products from JSON file
+async function loadProducts() {
+    try {
+        const response = await fetch('products.json');
+        if (!response.ok) {
+            throw new Error('Failed to load products');
+        }
+        const loadedProducts = await response.json();
+        products = loadedProducts;
+        
+        // Load custom products from localStorage
+        const customProducts = JSON.parse(localStorage.getItem('customFuelProducts') || '[]');
+        products = products.concat(customProducts);
+        
+        // Initial render
+        renderProducts();
+    } catch (error) {
+        console.error('Error loading products:', error);
+        // Fallback to empty array if loading fails
+        alert('Failed to load product database. You can still add custom products.');
+        products = [];
+        
+        // Load custom products from localStorage as fallback
+        const customProducts = JSON.parse(localStorage.getItem('customFuelProducts') || '[]');
+        products = customProducts;
+        
+        renderProducts();
+    }
+}
+
+// Initialize app
+async function initApp() {
+    await loadProducts();
+    loadFavorites();
+    loadCustomProducts();
+    renderProducts();
+    updateEventGoals();
+    updateSummary();
+    
+    // Event listeners
+    document.getElementById('duration').addEventListener('input', () => {
+        updateSummary();
+        if (multiLegEnabled) renderLegsFuelPlan();
+    });
+    document.getElementById('targetCarbs').addEventListener('input', () => {
+        updateSummary();
+        if (multiLegEnabled) renderLegsFuelPlan();
+    });
+    document.getElementById('targetSodium').addEventListener('input', () => {
+        updateSummary();
+        if (multiLegEnabled) renderLegsFuelPlan();
+    });
+    document.getElementById('caffeineInterval').addEventListener('input', updateSummary);
+    document.getElementById('caffeinePerDose').addEventListener('input', updateSummary);
+    
+    // Search functionality
+    document.getElementById('productSearch').addEventListener('input', function(e) {
+        searchQuery = e.target.value;
+        renderProducts();
+    });
+}
+
+// Call initApp when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
 
 // Toggle multi-leg planning
 function toggleMultiLegPlanning() {
@@ -174,28 +226,28 @@ function renderLegsConfig() {
     const container = document.getElementById('legsConfigContainer');
     
     container.innerHTML = legs.map((leg, index) => `
-        <div class="leg-config-card" style="background: white; padding: 15px; margin-bottom: 10px; border-radius: 6px; border: 2px solid #e0e0e0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 150px;">
+        <div class="leg-config-card">
+            <div class="leg-config-layout">
+                <div class="leg-config-name">
                     <input type="text" value="${leg.name}" 
                            onchange="updateLegProperty(${index}, 'name', this.value)"
                            placeholder="Leg name"
-                           style="width: 100%; border: 1px solid #ddd; padding: 8px; border-radius: 4px; font-weight: 500;">
+                           class="leg-config-input">
                 </div>
-                <div style="width: 120px;">
-                    <label style="font-size: 0.85em; color: #666; margin-bottom: 3px;">Duration (h)</label>
+                <div class="leg-config-field">
+                    <label class="leg-config-label">Duration (h)</label>
                     <input type="number" value="${leg.duration}" min="0.1" step="0.1"
                            onchange="updateLegProperty(${index}, 'duration', this.value)"
-                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                           class="leg-config-input">
                 </div>
-                <div style="width: 120px;">
-                    <label style="font-size: 0.85em; color: #666; margin-bottom: 3px;">Distance (km)</label>
+                <div class="leg-config-field">
+                    <label class="leg-config-label">Distance (km)</label>
                     <input type="number" value="${leg.distance || ''}" min="0" step="0.1"
                            onchange="updateLegProperty(${index}, 'distance', this.value)"
                            placeholder="Optional"
-                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                           class="leg-config-input">
                 </div>
-                <div style="display: flex; gap: 8px;">
+                <div class="leg-config-controls">
                     <button class="btn-small btn-danger" onclick="removeLeg(${index})" title="Delete">
                         <i class="fa-solid fa-trash"></i>
                     </button>
@@ -235,8 +287,16 @@ function renderLegsFuelPlan() {
         };
         
         // Color coding for per-hour rates
-        const carbsClass = targetCarbs > 0 ? (perHour.carbs >= targetCarbs * 0.95 ? 'target-met' : (perHour.carbs >= targetCarbs * 0.8 ? 'target-low' : 'target-very-low')) : '';
-        const sodiumClass = targetSodium > 0 ? (perHour.sodium >= targetSodium * 0.95 ? 'target-met' : (perHour.sodium >= targetSodium * 0.7 ? 'target-low' : 'target-very-low')) : '';
+        const carbsClass = targetCarbs > 0 
+            ? (perHour.carbs > targetCarbs * 1.05 ? 'target-exceeded' 
+                : (perHour.carbs >= targetCarbs * 0.95 ? 'target-met' 
+                    : (perHour.carbs >= targetCarbs * 0.8 ? 'target-low' : 'target-very-low'))) 
+            : '';
+        const sodiumClass = targetSodium > 0 
+            ? (perHour.sodium > targetSodium * 1.05 ? 'target-exceeded' 
+                : (perHour.sodium >= targetSodium * 0.95 ? 'target-met' 
+                    : (perHour.sodium >= targetSodium * 0.7 ? 'target-low' : 'target-very-low'))) 
+            : '';
         
         return `
         <div class="leg-fuel-card ${index === activeLegIndex ? 'active-leg-fuel' : ''}"
@@ -246,12 +306,12 @@ function renderLegsFuelPlan() {
              ondragleave="handleDragLeave(event)"
              style="cursor: pointer;">
             <div class="leg-fuel-header">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-weight: 600; font-size: 1.1em; color: #333;">${leg.name}</span>
-                    <span style="color: #666; font-size: 0.9em;">(${leg.duration}h${leg.distance ? `, ${leg.distance}km` : ''})</span>
-                    ${index === activeLegIndex ? '<span style="color: #667eea; font-size: 0.9em;"><i class="fa-solid fa-check-circle"></i> Active</span>' : ''}
+                <div class="leg-fuel-title">
+                    <span class="leg-name">${leg.name}</span>
+                    <span class="leg-meta">(${leg.duration}h${leg.distance ? `, ${leg.distance}km` : ''})</span>
+                    ${index === activeLegIndex ? '<span class="leg-active-badge"><i class="fa-solid fa-check-circle"></i> Active</span>' : ''}
                 </div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div class="leg-controls">
                     ${leg.fuelPlan.length > 0 ? `
                     <button class="btn-small" onclick="event.stopPropagation(); copyLegFuel(${index})" style="background: #17a2b8;" title="Copy fuel to other legs">
                         <i class="fa-solid fa-copy"></i> Copy
@@ -261,24 +321,24 @@ function renderLegsFuelPlan() {
             </div>
             
             ${leg.fuelPlan.length > 0 ? `
-            <div class="leg-nutrition-bar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; padding: 12px; background: linear-gradient(135deg,  #01295F 0%, #2F3061 100%); border-radius: 6px; margin-bottom: 15px;">
-                <div class="leg-nutrition-item ${carbsClass}" style="text-align: center;">
-                    <div style="font-size: 0.75em; opacity: 0.9; color: white;">Carbs/hr</div>
-                    <div style="font-size: 1.2em; font-weight: 600; color: white;">${perHour.carbs.toFixed(1)}g</div>
-                    ${targetCarbs > 0 ? `<div style="font-size: 0.7em; opacity: 0.8; color: white;">target: ${targetCarbs}g</div>` : ''}
+            <div class="leg-nutrition-bar">
+                <div class="nutrition-metric leg-nutrition-item ${carbsClass}">
+                    <div class="nutrition-label">Carbs/hr</div>
+                    <div class="nutrition-value">${perHour.carbs.toFixed(1)}g</div>
+                    ${targetCarbs > 0 ? `<div class="nutrition-target">target: ${targetCarbs}g</div>` : ''}
                 </div>
-                <div class="leg-nutrition-item ${sodiumClass}" style="text-align: center;">
-                    <div style="font-size: 0.75em; opacity: 0.9; color: white;">Sodium/hr</div>
-                    <div style="font-size: 1.2em; font-weight: 600; color: white;">${perHour.sodium.toFixed(0)}mg</div>
-                    ${targetSodium > 0 ? `<div style="font-size: 0.7em; opacity: 0.8; color: white;">target: ${targetSodium}mg</div>` : ''}
+                <div class="nutrition-metric leg-nutrition-item ${sodiumClass}">
+                    <div class="nutrition-label">Sodium/hr</div>
+                    <div class="nutrition-value">${perHour.sodium.toFixed(0)}mg</div>
+                    ${targetSodium > 0 ? `<div class="nutrition-target">target: ${targetSodium}mg</div>` : ''}
                 </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 0.75em; opacity: 0.9; color: white;">Total Carbs</div>
-                    <div style="font-size: 1.2em; font-weight: 600; color: white;">${legTotals.carbs.toFixed(0)}g</div>
+                <div class="nutrition-metric">
+                    <div class="nutrition-label">Total Carbs</div>
+                    <div class="nutrition-value">${legTotals.carbs.toFixed(0)}g</div>
                 </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 0.75em; opacity: 0.9; color: white;">Total Sodium</div>
-                    <div style="font-size: 1.2em; font-weight: 600; color: white;">${legTotals.sodium.toFixed(0)}mg</div>
+                <div class="nutrition-metric">
+                    <div class="nutrition-label">Total Sodium</div>
+                    <div class="nutrition-value">${legTotals.sodium.toFixed(0)}mg</div>
                 </div>
             </div>
             ` : ''}
@@ -299,28 +359,28 @@ function renderLegsFuelPlan() {
 // Render fuel items for a specific leg
 function renderLegFuelItems(leg, legIndex) {
     if (leg.fuelPlan.length === 0) {
-        return `<p style="color: #999; text-align: center; padding: 20px; font-size: 0.9em;">
-            ${legIndex === activeLegIndex ? 'Add products from the list above or drag items from other legs' : 'Drag items here or switch to this leg to add products'}
-        </p>`;
+        const message = legIndex === activeLegIndex 
+            ? 'Add products from the list above or drag items from other legs' 
+            : 'Drag items here or switch to this leg to add products';
+        return `<p class="empty-state empty-state-sm">${message}</p>`;
     }
     
     return leg.fuelPlan.map((item, itemIndex) => `
         <div class="fuel-item-compact" draggable="true" 
              ondragstart="handleDragStartFromLeg(event, ${legIndex}, ${itemIndex})"
              ondragend="handleDragEnd(event)">
-            <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
-                <i class="fa-solid fa-grip-vertical" style="color: #999;"></i>
-                <div style="flex: 1;">
-                    <div style="font-weight: 500; color: #333;">${item.product.name}</div>
-                    <div style="font-size: 0.85em; color: #666;">
+            <div class="fuel-item-compact-layout">
+                <i class="fa-solid fa-grip-vertical grip-handle"></i>
+                <div class="fuel-item-compact-info">
+                    <div class="fuel-item-compact-name">${item.product.name}</div>
+                    <div class="fuel-item-compact-stats">
                         ${item.quantity}x: ${item.product.carbs * item.quantity}g carbs, ${item.product.sodium * item.quantity}mg sodium
                     </div>
                 </div>
             </div>
-            <div style="display: flex; gap: 8px; align-items: center;">
+            <div class="fuel-item-compact-controls">
                 <input type="number" class="qty-input" value="${item.quantity}" min="1" 
-                       onchange="updateQuantityInLeg(${legIndex}, ${itemIndex}, this.value)"
-                       style="width: 50px;">
+                       onchange="updateQuantityInLeg(${legIndex}, ${itemIndex}, this.value)">
                 <button class="btn-small btn-danger" onclick="removeFromLegFuelPlan(${legIndex}, ${itemIndex})">
                     <i class="fa-solid fa-trash"></i>
                 </button>
@@ -465,35 +525,33 @@ function copyLegFuel(sourceLegIndex) {
         return;
     }
     
-    // Create a simple modal
+    // Create modal
     const modal = document.createElement('div');
-    modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+    modal.className = 'modal-overlay';
     
     const modalContent = document.createElement('div');
-    modalContent.style.cssText = 'background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%;';
+    modalContent.className = 'modal-content';
     
     modalContent.innerHTML = `
-        <h3 style="margin-bottom: 15px; color: #333;">Copy Fuel from "${sourceLeg.name}"</h3>
-        <p style="color: #666; margin-bottom: 20px;">Select which legs to copy this fuel to:</p>
-        <div style="margin-bottom: 20px;">
+        <h3 class="modal-title">Copy Fuel from "${sourceLeg.name}"</h3>
+        <p class="modal-description">Select which legs to copy this fuel to:</p>
+        <div class="modal-options">
             ${targetOptions.map(target => `
-                <label style="display: block; padding: 10px; margin-bottom: 8px; background: #f8f9fa; border-radius: 6px; cursor: pointer;">
-                    <input type="checkbox" class="copy-target" value="${target.index}" style="margin-right: 10px;">
+                <label class="modal-checkbox-label">
+                    <input type="checkbox" class="copy-target" value="${target.index}">
                     ${target.name}
                 </label>
             `).join('')}
         </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display: flex; align-items: center; cursor: pointer;">
-                <input type="checkbox" id="copyReplace" style="margin-right: 10px;">
-                <span style="color: #666; font-size: 0.9em;">Replace existing fuel (otherwise merges quantities)</span>
-            </label>
+        <div class="modal-option">
+            <input type="checkbox" id="copyReplace">
+            <span class="modal-option-text">Replace existing fuel (otherwise merges quantities)</span>
         </div>
-        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-            <button onclick="this.closest('div[style*=fixed]').remove()" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="this.closest('.modal-overlay').remove()">
                 Cancel
             </button>
-            <button id="confirmCopy" style="background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+            <button id="confirmCopy" class="btn-confirm">
                 Copy Fuel
             </button>
         </div>
@@ -817,7 +875,7 @@ function renderProducts() {
         <div class="product-card ${isSelected ? 'selected' : ''} ${isFavorite ? 'favorited' : ''}" 
              onclick="addToFuelPlan(${actualIndex})">
             <div class="favorite-star" onclick="toggleFavorite('${product.name.replace(/'/g, "\\'")}', event)">
-                ${isFavorite ? '⭐' : '☆'}
+                ${isFavorite ? '<i class="fa-solid fa-star" style="color: #FFD43B;"></i>' : '<i class="fa-regular fa-star" style="color: #FFD43B;"></i>'}
             </div>
             <div class="product-name">${product.name}</div>
             <div class="product-stats">
@@ -883,7 +941,7 @@ function renderFuelPlan() {
     if (!planDiv) return; // Safety check
     
     if (fuelPlan.length === 0) {
-        planDiv.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">Add products to build your fuel plan</p>';
+        planDiv.innerHTML = '<p class="empty-state">Add products to build your fuel plan</p>';
         return;
     }
 
@@ -1033,8 +1091,11 @@ function colorCodeSummaryItem(elementId, actual, target) {
     
     const percentage = (actual / target) * 100;
     
-    if (percentage >= 95) {
-        // Green: at or above target (95%+)
+    if (percentage > 105) {
+        // Red/Orange: significantly over target (>105%)
+        element.parentElement.className = 'summary-item target-exceeded';
+    } else if (percentage >= 95) {
+        // Green: at or above target (95-105%)
         element.parentElement.className = 'summary-item target-met';
     } else if (percentage >= 80) {
         // Yellow: below target but acceptable (80-94%)
@@ -1058,8 +1119,10 @@ function displayWarnings(actualCarbs, actualSodium, targetCarbs, targetSodium, t
     // Check carbs
     if (targetCarbs > 0) {
         const carbsPercentage = (actualCarbs / targetCarbs) * 100;
-        if (carbsPercentage < 80) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #F09A05;"></i> Your carb intake is ${carbsPercentage.toFixed(0)}% of your target. Consider adding more fuel to meet your goals.`);
+        if (carbsPercentage > 105) {
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your carb intake is ${carbsPercentage.toFixed(0)}% of your target (${(carbsPercentage - 100).toFixed(0)}% over).`);
+        } else if (carbsPercentage < 80) {
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your carb intake is ${carbsPercentage.toFixed(0)}% of your target. Consider adding more fuel to meet your goals.`);
         } else if (carbsPercentage >= 95 && carbsPercentage <= 105) {
             successes.push(`✓ Carb intake is right on target!`);
         }
@@ -1068,8 +1131,10 @@ function displayWarnings(actualCarbs, actualSodium, targetCarbs, targetSodium, t
     // Check sodium
     if (targetSodium > 0) {
         const sodiumPercentage = (actualSodium / targetSodium) * 100;
-        if (sodiumPercentage < 70) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #F09A05;"></i> Your sodium intake is ${sodiumPercentage.toFixed(0)}% of your target. Low sodium can lead to cramping and hyponatremia.`);
+        if (sodiumPercentage > 105) {
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your sodium intake is ${sodiumPercentage.toFixed(0)}% of your target (${(sodiumPercentage - 100).toFixed(0)}% over).`);
+        } else if (sodiumPercentage < 70) {
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your sodium intake is ${sodiumPercentage.toFixed(0)}% of your target. Low sodium can lead to cramping and hyponatremia.`);
         } else if (sodiumPercentage >= 90 && sodiumPercentage <= 110) {
             successes.push(`✓ Sodium intake looks good!`);
         }
@@ -1081,8 +1146,10 @@ function displayWarnings(actualCarbs, actualSodium, targetCarbs, targetSodium, t
         const targetTotalCaffeine = numberOfDoses * caffeinePerDose;
         const caffeinePercentage = targetTotalCaffeine > 0 ? (totalCaffeine / targetTotalCaffeine) * 100 : 0;
         
-        if (targetTotalCaffeine > 0 && caffeinePercentage < 80) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #F09A05;"></i> Your caffeine is ${caffeinePercentage.toFixed(0)}% of your target. You may want to add caffeinated products.`);
+        if (targetTotalCaffeine > 0 && caffeinePercentage > 105) {
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your caffeine is ${caffeinePercentage.toFixed(0)}% of your target (${(caffeinePercentage - 100).toFixed(0)}% over).`);
+        } else if (targetTotalCaffeine > 0 && caffeinePercentage < 80) {
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your caffeine is ${caffeinePercentage.toFixed(0)}% of your target. You may want to add caffeinated products.`);
         } else if (caffeinePercentage >= 95 && caffeinePercentage <= 105) {
             successes.push(`✓ Caffeine strategy is on target!`);
         }
@@ -1135,31 +1202,3 @@ function clearCustomProductForm() {
     document.getElementById('customPotassium').value = '';
     document.getElementById('customCaffeine').value = '';
 }
-
-// Event listeners
-document.getElementById('duration').addEventListener('input', () => {
-    updateSummary();
-    if (multiLegEnabled) renderLegsFuelPlan();
-});
-document.getElementById('targetCarbs').addEventListener('input', () => {
-    updateSummary();
-    if (multiLegEnabled) renderLegsFuelPlan();
-});
-document.getElementById('targetSodium').addEventListener('input', () => {
-    updateSummary();
-    if (multiLegEnabled) renderLegsFuelPlan();
-});
-document.getElementById('caffeineInterval').addEventListener('input', updateSummary);
-document.getElementById('caffeinePerDose').addEventListener('input', updateSummary);
-
-// Search functionality
-document.getElementById('productSearch').addEventListener('input', function(e) {
-    searchQuery = e.target.value;
-    renderProducts();
-});
-
-// Initialize
-loadFavorites(); // Load saved favorites
-loadCustomProducts(); // Load saved custom products
-renderProducts();
-updateEventGoals(); // Show initial event goals
