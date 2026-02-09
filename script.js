@@ -113,7 +113,7 @@ function toggleMultiLegPlanning() {
         const mergedPlan = [];
         legs.forEach(leg => {
             leg.fuelPlan.forEach(item => {
-                const existing = mergedPlan.find(m => m.product.name === item.product.name);
+                const existing = mergedPlan.find(m => getProductFullName(m.product) === getProductFullName(item.product));
                 if (existing) {
                     existing.quantity += item.quantity;
                 } else {
@@ -372,7 +372,7 @@ function renderLegFuelItems(leg, legIndex) {
             <div class="fuel-item-compact-layout">
                 <i class="fa-solid fa-grip-vertical grip-handle"></i>
                 <div class="fuel-item-compact-info">
-                    <div class="fuel-item-compact-name">${item.product.name}</div>
+                    <div class="fuel-item-compact-name">${getProductFullName(item.product)}</div>
                     <div class="fuel-item-compact-stats">
                         ${item.quantity}x: ${item.product.carbs * item.quantity}g carbs, ${item.product.sodium * item.quantity}mg sodium
                     </div>
@@ -454,7 +454,7 @@ function handleDrop(event, targetLegIndex) {
     legs[draggedFromLegIndex].fuelPlan.splice(draggedItemIndex, 1);
     
     // Add to target leg
-    const existing = legs[targetLegIndex].fuelPlan.find(i => i.product.name === item.product.name);
+    const existing = legs[targetLegIndex].fuelPlan.find(i => getProductFullName(i.product) === getProductFullName(item.product));
     if (existing) {
         existing.quantity += item.quantity;
     } else {
@@ -581,7 +581,7 @@ function copyLegFuel(sourceLegIndex) {
             } else {
                 // Merge: add quantities for existing items
                 sourceLeg.fuelPlan.forEach(sourceItem => {
-                    const existing = legs[targetIndex].fuelPlan.find(i => i.product.name === sourceItem.product.name);
+                    const existing = legs[targetIndex].fuelPlan.find(i => getProductFullName(i.product) === getProductFullName(sourceItem.product));
                     if (existing) {
                         existing.quantity += sourceItem.quantity;
                     } else {
@@ -641,7 +641,7 @@ function downloadFuelPlan() {
                 csvContent += 'No fuel items\n';
             } else {
                 leg.fuelPlan.forEach(item => {
-                    csvContent += `"${item.product.name}",${item.quantity},${item.product.carbs * item.quantity},${item.product.sodium * item.quantity},${item.product.potassium * item.quantity},${item.product.caffeine * item.quantity}\n`;
+                    csvContent += `"${getProductFullName(item.product)}",${item.quantity},${item.product.carbs * item.quantity},${item.product.sodium * item.quantity},${item.product.potassium * item.quantity},${item.product.caffeine * item.quantity}\n`;
                 });
                 
                 const legTotals = leg.fuelPlan.reduce((acc, item) => {
@@ -685,7 +685,7 @@ function downloadFuelPlan() {
             csvContent += 'No fuel items\n';
         } else {
             fuelPlan.forEach(item => {
-                csvContent += `"${item.product.name}",${item.quantity},${item.product.carbs * item.quantity},${item.product.sodium * item.quantity},${item.product.potassium * item.quantity},${item.product.caffeine * item.quantity}\n`;
+                csvContent += `"${getProductFullName(item.product)}",${item.quantity},${item.product.carbs * item.quantity},${item.product.sodium * item.quantity},${item.product.potassium * item.quantity},${item.product.caffeine * item.quantity}\n`;
             });
             
             const totals = fuelPlan.reduce((acc, item) => {
@@ -765,7 +765,7 @@ function toggleFavorite(productName, event) {
 
 // Get product quantity in fuel plan
 function getProductQuantity(productName) {
-    const item = fuelPlan.find(item => item.product.name === productName);
+    const item = fuelPlan.find(item => getProductFullName(item.product) === productName);
     return item ? item.quantity : 0;
 }
 
@@ -850,33 +850,45 @@ function saveCustomProducts() {
 function renderProducts() {
     const grid = document.getElementById('productGrid');
     
-    // Filter products by search query
-    let filteredProducts = products.filter(product => 
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Filter products by search query (search both brand and name)
+    let filteredProducts = products.filter(product => {
+        const searchLower = searchQuery.toLowerCase();
+        const brandMatch = product.brand ? product.brand.toLowerCase().includes(searchLower) : false;
+        const nameMatch = product.name.toLowerCase().includes(searchLower);
+        return brandMatch || nameMatch;
+    });
     
-    // Sort: favorites first, then alphabetically
+    // Sort: favorites first, then by brand, then by name
     filteredProducts.sort((a, b) => {
-        const aFav = favorites.includes(a.name);
-        const bFav = favorites.includes(b.name);
+        const aFav = favorites.includes(getProductFullName(a));
+        const bFav = favorites.includes(getProductFullName(b));
         
         if (aFav && !bFav) return -1;
         if (!aFav && bFav) return 1;
+        
+        // Sort by brand first
+        const brandA = a.brand || '';
+        const brandB = b.brand || '';
+        if (brandA !== brandB) return brandA.localeCompare(brandB);
+        
+        // Then by name
         return a.name.localeCompare(b.name);
     });
     
     grid.innerHTML = filteredProducts.map((product, index) => {
         const actualIndex = products.indexOf(product);
-        const isFavorite = favorites.includes(product.name);
-        const quantity = getProductQuantity(product.name);
+        const fullName = getProductFullName(product);
+        const isFavorite = favorites.includes(fullName);
+        const quantity = getProductQuantity(fullName);
         const isSelected = quantity > 0;
         
         return `
         <div class="product-card ${isSelected ? 'selected' : ''} ${isFavorite ? 'favorited' : ''}" 
              onclick="addToFuelPlan(${actualIndex})">
-            <div class="favorite-star" onclick="toggleFavorite('${product.name.replace(/'/g, "\\'")}', event)">
+            <div class="favorite-star" onclick="toggleFavorite('${fullName.replace(/'/g, "\\'")}', event)">
                 ${isFavorite ? '<i class="fa-solid fa-star" style="color: #FFD43B;"></i>' : '<i class="fa-regular fa-star" style="color: #FFD43B;"></i>'}
             </div>
+            ${product.brand ? `<div class="product-brand">${product.brand}</div>` : ''}
             <div class="product-name">${product.name}</div>
             <div class="product-stats">
                 Carbs: ${product.carbs}g<br>
@@ -889,9 +901,15 @@ function renderProducts() {
     }).join('');
 }
 
+// Helper function to get full product name
+function getProductFullName(product) {
+    return product.brand ? `${product.brand} ${product.name}` : product.name;
+}
+
 function addToFuelPlan(productIndex) {
     const product = products[productIndex];
-    const existing = fuelPlan.find(item => item.product.name === product.name);
+    const fullName = getProductFullName(product);
+    const existing = fuelPlan.find(item => getProductFullName(item.product) === fullName);
     
     if (existing) {
         existing.quantity++;
@@ -948,7 +966,7 @@ function renderFuelPlan() {
     planDiv.innerHTML = fuelPlan.map((item, index) => `
         <div class="fuel-item">
             <div class="fuel-item-info">
-                <div class="fuel-item-name">${item.product.name}</div>
+                <div class="fuel-item-name">${getProductFullName(item.product)}</div>
                 <div class="fuel-item-stats">
                     ${item.quantity}x: 
                     ${item.product.carbs * item.quantity}g carbs, 
@@ -1120,7 +1138,7 @@ function displayWarnings(actualCarbs, actualSodium, targetCarbs, targetSodium, t
     if (targetCarbs > 0) {
         const carbsPercentage = (actualCarbs / targetCarbs) * 100;
         if (carbsPercentage > 105) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your carb intake is ${carbsPercentage.toFixed(0)}% of your target (${(carbsPercentage - 100).toFixed(0)}% over).`);
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your carb intake is ${carbsPercentage.toFixed(0)}% of your target (${(carbsPercentage - 100).toFixed(0)}% over). This may cause GI distress.`);
         } else if (carbsPercentage < 80) {
             warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your carb intake is ${carbsPercentage.toFixed(0)}% of your target. Consider adding more fuel to meet your goals.`);
         } else if (carbsPercentage >= 95 && carbsPercentage <= 105) {
@@ -1132,7 +1150,7 @@ function displayWarnings(actualCarbs, actualSodium, targetCarbs, targetSodium, t
     if (targetSodium > 0) {
         const sodiumPercentage = (actualSodium / targetSodium) * 100;
         if (sodiumPercentage > 105) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your sodium intake is ${sodiumPercentage.toFixed(0)}% of your target (${(sodiumPercentage - 100).toFixed(0)}% over).`);
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your sodium intake is ${sodiumPercentage.toFixed(0)}% of your target (${(sodiumPercentage - 100).toFixed(0)}% over). This may cause bloating or excess thirst.`);
         } else if (sodiumPercentage < 70) {
             warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your sodium intake is ${sodiumPercentage.toFixed(0)}% of your target. Low sodium can lead to cramping and hyponatremia.`);
         } else if (sodiumPercentage >= 90 && sodiumPercentage <= 110) {
@@ -1147,7 +1165,7 @@ function displayWarnings(actualCarbs, actualSodium, targetCarbs, targetSodium, t
         const caffeinePercentage = targetTotalCaffeine > 0 ? (totalCaffeine / targetTotalCaffeine) * 100 : 0;
         
         if (targetTotalCaffeine > 0 && caffeinePercentage > 105) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your caffeine is ${caffeinePercentage.toFixed(0)}% of your target (${(caffeinePercentage - 100).toFixed(0)}% over).`);
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your caffeine is ${caffeinePercentage.toFixed(0)}% of your target (${(caffeinePercentage - 100).toFixed(0)}% over). Too much caffeine may cause jitters or GI issues.`);
         } else if (targetTotalCaffeine > 0 && caffeinePercentage < 80) {
             warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your caffeine is ${caffeinePercentage.toFixed(0)}% of your target. You may want to add caffeinated products.`);
         } else if (caffeinePercentage >= 95 && caffeinePercentage <= 105) {
