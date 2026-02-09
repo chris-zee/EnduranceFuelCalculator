@@ -1,96 +1,326 @@
 [
   {
-    "name": "GU Energy Gel",
+    "brand": "GU Energy",
+    "name": "Energy Gel",
     "carbs": 22,
     "sodium": 55,
     "potassium": 35,
     "caffeine": 0
   },
   {
-    "name": "GU Energy Gel (Caffeine)",
+    "brand": "GU Energy",
+    "name": "Energy Gel (Caffeine)",
     "carbs": 22,
     "sodium": 55,
     "potassium": 35,
     "caffeine": 40
   },
   {
-    "name": "Maurten Gel 100",
+    "brand": "GU Energy",
+    "name": "Roctane Energy Gel",
+    "carbs": 24,
+    "sodium": 60,
+    "potassium": 40,
+    "caffeine": 0
+  },
+  {
+    "brand": "GU Energy",
+    "name": "Roctane Energy Gel (Caffeine)",
+    "carbs": 24,
+    "sodium": 60,
+    "potassium": 40,
+    "caffeine": 35
+  },
+  {
+    "brand": "Maurten",
+    "name": "Gel 100",
     "carbs": 25,
     "sodium": 42,
     "potassium": 10,
     "caffeine": 0
   },
   {
-    "name": "Maurten Gel 100 CAF 100",
+    "brand": "Maurten",
+    "name": "Gel 100 CAF 100",
     "carbs": 25,
     "sodium": 42,
     "potassium": 10,
     "caffeine": 100
   },
   {
-    "name": "SIS Go Isotonic Energy Gel",
+    "brand": "Maurten",
+    "name": "Drink Mix 320",
+    "carbs": 79,
+    "sodium": 115,
+    "potassium": 12,
+    "caffeine": 0
+  },
+  {
+    "brand": "Maurten",
+    "name": "Drink Mix 160",
+    "carbs": 39,
+    "sodium": 57,
+    "potassium": 6,
+    "caffeine": 0
+  },
+  {
+    "brand": "Maurten",
+    "name": "Solid 225",
+    "carbs": 40,
+    "sodium": 75,
+    "potassium": 15,
+    "caffeine": 0
+  },
+  {
+    "brand": "Precision Fuel & Hydration",
+    "name": "PF 30 Gel",
+    "carbs": 30,
+    "sodium": 0,
+    "potassium": 0,
+    "caffeine": 0
+  },
+  {
+    "brand": "Precision Fuel & Hydration",
+    "name": "PF 30 Gel + Caffeine",
+    "carbs": 30,
+    "sodium": 0,
+    "potassium": 0,
+    "caffeine": 100
+  },
+  {
+    "brand": "Precision Fuel & Hydration",
+    "name": "PF Carb & Electrolyte Drink Mix (serving)",
+    "carbs": 30,
+    "sodium": 250,
+    "potassium": 25,
+    "caffeine": 0
+  },
+  {
+    "brand": "Precision Fuel & Hydration",
+    "name": "PF Carb Only Drink Mix (serving)",
+    "carbs": 30,
+    "sodium": 0,
+    "potassium": 0,
+    "caffeine": 0
+  },
+  {
+    "brand": "Precision Fuel & Hydration",
+    "name": "PH 500 Electrolyte Tablet",
+    "carbs": 0,
+    "sodium": 500,
+    "potassium": 15,
+    "caffeine": 0
+  },
+  {
+    "brand": "Precision Fuel & Hydration",
+    "name": "PH 1000 Electrolyte Tablet",
+    "carbs": 0,
+    "sodium": 1000,
+    "potassium": 30,
+    "caffeine": 0
+  },
+  {
+    "brand": "Precision Fuel & Hydration",
+    "name": "PH 1500 Electrolyte Tablet",
+    "carbs": 0,
+    "sodium": 1500,
+    "potassium": 45,
+    "caffeine": 0
+  },
+  {
+    "brand": "Science in Sport",
+    "name": "GO Isotonic Energy Gel",
     "carbs": 22,
     "sodium": 20,
     "potassium": 10,
     "caffeine": 0
   },
   {
-    "name": "Tailwind Endurance Fuel (1 scoop)",
+    "brand": "Science in Sport",
+    "name": "GO Isotonic Energy Gel + Caffeine",
+    "carbs": 22,
+    "sodium": 20,
+    "potassium": 10,
+    "caffeine": 75
+  },
+  {
+    "brand": "Science in Sport",
+    "name": "Beta Fuel Gel",
+    "carbs": 40,
+    "sodium": 60,
+    "potassium": 10,
+    "caffeine": 0
+  },
+  {
+    "brand": "Science in Sport",
+    "name": "Beta Fuel Chew",
+    "carbs": 46,
+    "sodium": 80,
+    "potassium": 12,
+    "caffeine": 0
+  },
+  {
+    "brand": "Tailwind",
+    "name": "Endurance Fuel (1 scoop)",
     "carbs": 25,
     "sodium": 115,
     "potassium": 45,
     "caffeine": 0
   },
   {
-    "name": "Tailwind Caffeinated (1 scoop)",
+    "brand": "Tailwind",
+    "name": "Endurance Fuel Caffeinated (1 scoop)",
     "carbs": 25,
     "sodium": 115,
     "potassium": 45,
     "caffeine": 35
   },
   {
-    "name": "Honey Stinger Energy Gel",
+    "brand": "Tailwind",
+    "name": "Rebuild Recovery (1 scoop)",
+    "carbs": 25,
+    "sodium": 125,
+    "potassium": 95,
+    "caffeine": 0
+  },
+  {
+    "brand": "Honey Stinger",
+    "name": "Energy Gel",
     "carbs": 24,
     "sodium": 50,
     "potassium": 15,
     "caffeine": 0
   },
   {
-    "name": "Clif Shot Energy Gel",
+    "brand": "Honey Stinger",
+    "name": "Energy Gel + Caffeine",
+    "carbs": 24,
+    "sodium": 50,
+    "potassium": 15,
+    "caffeine": 32
+  },
+  {
+    "brand": "Honey Stinger",
+    "name": "Organic Waffle",
+    "carbs": 21,
+    "sodium": 60,
+    "potassium": 20,
+    "caffeine": 0
+  },
+  {
+    "brand": "Clif",
+    "name": "Shot Energy Gel",
     "carbs": 24,
     "sodium": 90,
     "potassium": 20,
     "caffeine": 0
   },
   {
-    "name": "Clif Shot Energy Gel (Caffeine)",
+    "brand": "Clif",
+    "name": "Shot Energy Gel + Caffeine",
     "carbs": 24,
     "sodium": 90,
     "potassium": 20,
     "caffeine": 50
   },
   {
-    "name": "Spring Energy Gel",
+    "brand": "Clif",
+    "name": "Bloks Energy Chews (3 pieces)",
+    "carbs": 24,
+    "sodium": 70,
+    "potassium": 20,
+    "caffeine": 0
+  },
+  {
+    "brand": "Spring Energy",
+    "name": "Awesome Sauce Gel",
     "carbs": 22,
     "sodium": 80,
     "potassium": 50,
     "caffeine": 0
   },
   {
-    "name": "Huma Chia Energy Gel",
+    "brand": "Spring Energy",
+    "name": "Canaberry Gel",
+    "carbs": 23,
+    "sodium": 85,
+    "potassium": 55,
+    "caffeine": 0
+  },
+  {
+    "brand": "Huma",
+    "name": "Chia Energy Gel",
     "carbs": 21,
     "sodium": 50,
     "potassium": 55,
     "caffeine": 0
   },
   {
-    "name": "SaltStick Caps",
+    "brand": "Huma",
+    "name": "Chia Energy Gel + Caffeine",
+    "carbs": 21,
+    "sodium": 50,
+    "potassium": 55,
+    "caffeine": 40
+  },
+  {
+    "brand": "Skratch Labs",
+    "name": "Sport Hydration Mix (serving)",
+    "carbs": 21,
+    "sodium": 380,
+    "potassium": 39,
+    "caffeine": 0
+  },
+  {
+    "brand": "Skratch Labs",
+    "name": "Energy Chews (4 pieces)",
+    "carbs": 24,
+    "sodium": 100,
+    "potassium": 25,
+    "caffeine": 0
+  },
+  {
+    "brand": "Skratch Labs",
+    "name": "Anytime Energy Bar",
+    "carbs": 27,
+    "sodium": 150,
+    "potassium": 80,
+    "caffeine": 0
+  },
+  {
+    "brand": "UCAN",
+    "name": "Edge Gel",
+    "carbs": 20,
+    "sodium": 110,
+    "potassium": 45,
+    "caffeine": 0
+  },
+  {
+    "brand": "UCAN",
+    "name": "Energy + Protein (serving)",
+    "carbs": 26,
+    "sodium": 200,
+    "potassium": 100,
+    "caffeine": 0
+  },
+  {
+    "brand": "SaltStick",
+    "name": "Caps (1 capsule)",
     "carbs": 0,
     "sodium": 215,
     "potassium": 63,
     "caffeine": 0
   },
   {
+    "brand": "SaltStick",
+    "name": "FastChews (2 tablets)",
+    "carbs": 2,
+    "sodium": 200,
+    "potassium": 30,
+    "caffeine": 0
+  },
+  {
+    "brand": "Whole Food",
     "name": "Banana (medium)",
     "carbs": 27,
     "sodium": 1,
@@ -98,10 +328,19 @@
     "caffeine": 0
   },
   {
-    "name": "Stroopwafel",
-    "carbs": 21,
-    "sodium": 100,
-    "potassium": 20,
+    "brand": "Whole Food",
+    "name": "Medjool Dates (2 pieces)",
+    "carbs": 32,
+    "sodium": 0,
+    "potassium": 167,
+    "caffeine": 0
+  },
+  {
+    "brand": "Whole Food",
+    "name": "Rice Cake with Jam",
+    "carbs": 30,
+    "sodium": 50,
+    "potassium": 25,
     "caffeine": 0
   }
 ]
