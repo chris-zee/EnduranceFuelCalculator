@@ -502,7 +502,7 @@ button:hover {
 }
 
 .leg-nutrition-bar {
-    background: linear-gradient(135deg, #56CBF9 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 12px;
     border-radius: 6px;
@@ -626,7 +626,7 @@ button:hover {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 10px;
     padding: 12px;
-    background: linear-gradient(135deg,  #01295F 0%, #2F3061 100%);
+    background: linear-gradient(135deg, #01295F 0%, #2F3061 100%);
     border-radius: 6px;
     margin-bottom: 15px;
 }
@@ -793,13 +793,23 @@ button:hover {
 
 .product-title {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.product-brand {
+    font-size: 0.75em;
+    color: #56CBF9;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .product-name {
     font-weight: 600;
     color: #333;
+    font-size: 0.95em;
 }
 
 .favorite-btn {
