@@ -1,0 +1,63 @@
+[
+  {
+    "name": "UTA Miler (100 Miles)",
+    "distance": 161,
+    "unit": "km",
+    "aidStations": [
+      {"name": "Govetts Leap Rd (Start)", "distance": 0, "dropBag": true},
+      {"name": "Govetts Leap Carpark", "distance": 12.4, "dropBag": false},
+      {"name": "Perry's Lookdown", "distance": 19.1, "dropBag": false},
+      {"name": "Fortress Ridge", "distance": 29.5, "dropBag": false},
+      {"name": "Hydro Majestic", "distance": 47, "dropBag": true},
+      {"name": "Narrow Neck Lookout", "distance": 54.7, "dropBag": false},
+      {"name": "Tarros", "distance": 67, "dropBag": false},
+      {"name": "Foggy Knob", "distance": 76.9, "dropBag": false},
+      {"name": "Six Foot Track Outbound", "distance": 90.4, "dropBag": true},
+      {"name": "Six Foot Track Inbound", "distance": 106.3, "dropBag": true},
+      {"name": "Katoomba Aquatic Centre", "distance": 116.5, "dropBag": true},
+      {"name": "Fairmont Resort", "distance": 128.4, "dropBag": false},
+      {"name": "Queen Victoria Hospital", "distance": 139.3, "dropBag": true},
+      {"name": "Emergency Aid Station", "distance": 152.4, "dropBag": false},
+      {"name": "Scenic World (Finish)", "distance": 161.01, "dropBag": true}
+    ]
+  },
+  {
+    "name": "UTA100",
+    "distance": 101,
+    "unit": "km",
+    "aidStations": [
+      {"name": "Scenic World (Start)", "distance": 0, "dropBag": true},
+      {"name": "Tarros", "distance": 13.7, "dropBag": false},
+      {"name": "Foggy Knob", "distance": 23.6, "dropBag": false},
+      {"name": "Six Foot Track Outbound", "distance": 37.1, "dropBag": true},
+      {"name": "Six Foot Track Water Point", "distance": 45.3, "dropBag": false},
+      {"name": "Katoomba Aquatic Centre", "distance": 55.8, "dropBag": true},
+      {"name": "Fairmont Resort", "distance": 67.7, "dropBag": false},
+      {"name": "Queen Victoria Hospital", "distance": 78.6, "dropBag": true},
+      {"name": "Emergency Aid Station", "distance": 91.7, "dropBag": false},
+      {"name": "Scenic World (Finish)", "distance": 100.1, "dropBag": true}
+    ]
+  },
+  {
+    "name": "UTA50",
+    "distance": 51,
+    "unit": "km",
+    "aidStations": [
+      {"name": "Scenic World (Start)", "distance": 0, "dropBag": true},
+      {"name": "Fairmont Resort", "distance": 18.1, "dropBag": false},
+      {"name": "Queen Victoria Hospital", "distance": 29, "dropBag": true},
+      {"name": "Emergency Aid Station", "distance": 42.1, "dropBag": false},
+      {"name": "Scenic World (Finish)", "distance": 50.7, "dropBag": true}
+    ]
+  },
+  {
+    "name": "UTA22",
+    "distance": 22,
+    "unit": "km",
+    "aidStations": [
+      {"name": "Queen Victoria Hospital (Start)", "distance": 0, "dropBag": false},
+      {"name": "Emergency Aid Station", "distance": 13.1, "dropBag": false},
+      {"name": "Scenic World (Finish)", "distance": 21.7, "dropBag": true}
+    ]
+  }
+]
