@@ -5,15 +5,14 @@
 }
 
 body {
-    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: linear-gradient(135deg, #2C5530 0%, #5DAC65 100%);
     min-height: 100vh;
-    padding: 20px;
 }
 
 .container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 20px auto;
     background: white;
     border-radius: 16px;
     padding: 30px;
@@ -614,6 +613,31 @@ button:hover {
     font-size: 0.9em;
 }
 
+.drop-bag-label {
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.drop-bag-label.active {
+    background: #ffc107;
+    color: #333;
+    font-weight: 600;
+}
+
+.drop-bag-badge-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: #ffc107;
+    color: #333;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
 .leg-controls {
     display: flex;
     gap: 8px;
@@ -681,6 +705,17 @@ button:hover {
 .modal-description {
     color: #666;
     margin-bottom: 20px;
+}
+
+.modal-helper-text {
+    color: #888;
+    font-size: 0.9em;
+    font-style: italic;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-left: 3px solid #56CBF9;
+    border-radius: 4px;
 }
 
 .modal-options {
@@ -806,6 +841,124 @@ button:hover {
     letter-spacing: 0.5px;
 }
 
+.help-icon {
+    color: #56CBF9;
+    font-size: 0.9em;
+    cursor: help;
+    display: inline-flex;
+    align-items: center;
+}
+
+.help-icon:hover {
+    color: #089DD9;
+}
+
+/* Brand Multi-Select (Select2-style) */
+.brand-multiselect-container {
+    position: relative;
+    width: 100%;
+}
+
+.brand-multiselect-input {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 4px 35px 4px 8px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    position: relative;
+}
+
+.brand-multiselect-input:hover {
+    border-color: #56CBF9;
+}
+
+.brand-multiselect-input.open {
+    border-color: #56CBF9;
+    box-shadow: 0 0 0 3px rgba(86, 203, 249, 0.1);
+}
+
+.brand-pills-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    flex: 1;
+    align-items: center;
+}
+
+.placeholder-text {
+    color: #999;
+    font-size: 0.9em;
+}
+
+.selected-brand-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    background: #56CBF9;
+    color: white;
+    border-radius: 12px;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+.selected-brand-pill .remove-pill {
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 2px;
+    opacity: 0.8;
+}
+
+.selected-brand-pill .remove-pill:hover {
+    opacity: 1;
+}
+
+.dropdown-arrow {
+    position: absolute;
+    right: 12px;
+    color: #666;
+    pointer-events: none;
+    transition: transform 0.2s;
+}
+
+.brand-multiselect-input.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.brand-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.brand-dropdown-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.brand-dropdown-item:hover {
+    background: #f5f5f5;
+}
+
+.brand-dropdown-item.selected {
+    background: #e8f4fd;
+    color: #089DD9;
+}
+
 .product-name {
     font-weight: 600;
     color: #333;
@@ -866,6 +1019,21 @@ button:hover {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .search-favorites-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+    }
+    
+    .search-favorites-row > div {
+        width: 100% !important;
+        min-width: auto !important;
+    }
+    
+    .favorites-hint {
+        text-align: left !important;
+    }
+    
     .section-header {
         flex-direction: column;
         align-items: flex-start;
@@ -970,5 +1138,123 @@ button:hover {
     .fuel-item-compact-controls .btn-small {
         flex: 0 0 auto;
         min-width: 80px;
+    }
+}
+
+/* Disclaimer Section (above footer) */
+.disclaimer-section {
+    background: #fff9e6;
+    border-top: 3px solid #ffc107;
+    border-bottom: 3px solid #ffc107;
+    padding: 20px;
+}
+
+.disclaimer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    font-size: 0.9em;
+    line-height: 1.6;
+    color: #333;
+}
+
+.disclaimer-content strong {
+    color: #333;
+}
+
+/* Footer */
+.footer {
+    background: linear-gradient(135deg, #0C1B33 0%, #132C53 100%);
+    color: white;
+    padding: 30px 20px 20px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.footer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s;
+    font-size: 0.95em;
+}
+
+.footer-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.footer-links span {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-copyright {
+    text-align: center;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .footer-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .footer-btn {
+        justify-content: center;
+    }
+    
+    .disclaimer-section {
+        padding: 15px 0;
+    }
+    
+    .disclaimer-content {
+        font-size: 0.85em;
+        padding: 0 15px;
     }
 }
