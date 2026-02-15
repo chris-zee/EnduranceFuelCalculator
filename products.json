@@ -161,7 +161,7 @@
   },
   {
     "brand": "Tailwind",
-    "name": "Endurance Fuel (1 scoop)",
+    "name": "Endurance Fuel (27g scoop)",
     "carbs": 25,
     "sodium": 115,
     "potassium": 45,
@@ -169,7 +169,7 @@
   },
   {
     "brand": "Tailwind",
-    "name": "Endurance Fuel Caffeinated (1 scoop)",
+    "name": "Endurance Fuel Caffeinated (27g scoop)",
     "carbs": 25,
     "sodium": 115,
     "potassium": 45,
@@ -177,7 +177,7 @@
   },
   {
     "brand": "Tailwind",
-    "name": "Rebuild Recovery (1 scoop)",
+    "name": "Rebuild Recovery (27g scoop)",
     "carbs": 25,
     "sodium": 125,
     "potassium": 95,
@@ -190,6 +190,22 @@
     "sodium": 50,
     "potassium": 15,
     "caffeine": 0
+  },
+  {
+    "brand": "Trail Brew",
+    "name": "Blood Orange + Caffeine",
+    "carbs": 44,
+    "sodium": 798,
+    "potassium": 195,
+    "caffeine": 60
+  },
+    {
+    "brand": "Trail Brew",
+    "name": "Energy + Electrolytes",
+    "carbs": 44,
+    "sodium": 798,
+    "potassium": 195,
+    "caffeine": 60
   },
   {
     "brand": "Honey Stinger",
@@ -344,3 +360,4 @@
     "caffeine": 0
   }
 ]
+
