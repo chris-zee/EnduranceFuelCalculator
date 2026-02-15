@@ -8,6 +8,8 @@ let multiLegEnabled = false;
 let legs = [];
 let activeLegIndex = 0;
 let products = []; // Will be loaded from JSON
+let raceTemplates = []; // Will be loaded from races.json
+let selectedBrands = []; // Selected brand filters
 
 // Load products from JSON file
 async function loadProducts() {
@@ -23,6 +25,9 @@ async function loadProducts() {
         const customProducts = JSON.parse(localStorage.getItem('customFuelProducts') || '[]');
         products = products.concat(customProducts);
         
+        // Populate brand filter dropdown
+        populateBrandFilter();
+        
         // Initial render
         renderProducts();
     } catch (error) {
@@ -35,16 +40,144 @@ async function loadProducts() {
         const customProducts = JSON.parse(localStorage.getItem('customFuelProducts') || '[]');
         products = customProducts;
         
+        populateBrandFilter();
         renderProducts();
+    }
+}
+
+// Populate brand dropdown with checkboxes
+function populateBrandFilter() {
+    const brandDropdown = document.getElementById('brandDropdown');
+    if (!brandDropdown) return;
+    
+    // Get unique brands
+    const brands = [...new Set(products
+        .map(p => p.brand)
+        .filter(Boolean)
+        .sort())];
+    
+    // Create dropdown items without checkboxes
+    brandDropdown.innerHTML = brands.map(brand => `
+        <div class="brand-dropdown-item ${selectedBrands.includes(brand) ? 'selected' : ''}" onclick="toggleBrandSelection('${brand.replace(/'/g, "\\'")}', event)">
+            ${brand}
+        </div>
+    `).join('');
+    
+    updatePillsDisplay();
+}
+
+// Toggle brand dropdown visibility
+function toggleBrandDropdown() {
+    const dropdown = document.getElementById('brandDropdown');
+    const input = document.getElementById('brandMultiselectInput');
+    
+    if (dropdown.style.display === 'none') {
+        dropdown.style.display = 'block';
+        input.classList.add('open');
+    } else {
+        dropdown.style.display = 'none';
+        input.classList.remove('open');
+    }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const container = document.querySelector('.brand-multiselect-container');
+    if (container && !container.contains(event.target)) {
+        document.getElementById('brandDropdown').style.display = 'none';
+        document.getElementById('brandMultiselectInput').classList.remove('open');
+    }
+});
+
+// Toggle brand selection
+function toggleBrandSelection(brand, event) {
+    event.stopPropagation();
+    
+    const index = selectedBrands.indexOf(brand);
+    if (index > -1) {
+        selectedBrands.splice(index, 1);
+    } else {
+        selectedBrands.push(brand);
+    }
+    
+    // Update selected class on the dropdown item
+    if (selectedBrands.includes(brand)) {
+        event.currentTarget.classList.add('selected');
+    } else {
+        event.currentTarget.classList.remove('selected');
+    }
+    
+    updatePillsDisplay();
+    renderProducts();
+}
+
+// Remove a brand pill
+function removeBrandPill(brand, event) {
+    event.stopPropagation();
+    
+    const index = selectedBrands.indexOf(brand);
+    if (index > -1) {
+        selectedBrands.splice(index, 1);
+    }
+    
+    // Update dropdown checkboxes
+    populateBrandFilter();
+    updatePillsDisplay();
+    renderProducts();
+}
+
+// Update the pills display in the input
+function updatePillsDisplay() {
+    const pillsDisplay = document.getElementById('brandPillsDisplay');
+    
+    if (selectedBrands.length === 0) {
+        pillsDisplay.innerHTML = '<span class="placeholder-text">Filter by brand...</span>';
+    } else {
+        pillsDisplay.innerHTML = selectedBrands.map(brand => `
+            <div class="selected-brand-pill">
+                ${brand}
+                <span class="remove-pill" onclick="removeBrandPill('${brand.replace(/'/g, "\\'")}', event)">×</span>
+            </div>
+        `).join('');
+    }
+}
+
+// Load race templates from JSON file
+async function loadRaces() {
+    try {
+        const response = await fetch('races.json');
+        if (!response.ok) {
+            throw new Error('Failed to load races');
+        }
+        raceTemplates = await response.json();
+    } catch (error) {
+        console.error('Error loading races:', error);
+        raceTemplates = [];
+    }
+}
+
+// Load race templates from JSON file
+async function loadRaces() {
+    try {
+        const response = await fetch('races.json');
+        if (!response.ok) {
+            throw new Error('Failed to load races');
+        }
+        raceTemplates = await response.json();
+    } catch (error) {
+        console.error('Error loading races:', error);
+        raceTemplates = [];
     }
 }
 
 // Initialize app
 async function initApp() {
     await loadProducts();
+    await loadRaces();
     loadFavorites();
     loadCustomProducts();
     renderProducts();
+    renderLegsFuelPlan(); // Initialize fuel plan container with placeholder
     updateEventGoals();
     updateSummary();
     
@@ -139,6 +272,7 @@ function addLeg() {
         name: `Leg ${legNumber}`,
         duration: 2,
         distance: null,
+        dropBag: false,
         fuelPlan: []
     });
     renderLegsConfig();
@@ -158,6 +292,91 @@ function removeLeg(index) {
         activeLegIndex = legs.length - 1;
     }
     fuelPlan = legs[activeLegIndex].fuelPlan;
+    renderLegsConfig();
+    renderLegsFuelPlan();
+    updateTotalDuration();
+    updateSummary();
+}
+
+// Show race template modal
+function showRaceTemplateModal() {
+    if (raceTemplates.length === 0) {
+        alert('No race templates available');
+        return;
+    }
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3 class="modal-title">Load Race Template</h3>
+            <p class="modal-description">Select a race and enter your target finish time to auto-populate legs with aid stations.</p>
+            <p class="modal-helper-text">Split times are calculated based on average pace and do not account for elevation or terrain variation. You may need to adjust individual leg times based on your race strategy and course profile.</p>
+            
+            <div class="modal-options">
+                <label style="display: block; margin-bottom: 10px;">
+                    <strong>Select Race:</strong>
+                    <select id="raceSelect" style="width: 100%; margin-top: 5px; padding: 8px;">
+                        ${raceTemplates.map((race, i) => 
+                            `<option value="${i}">${race.name} (${race.distance}${race.unit})</option>`
+                        ).join('')}
+                    </select>
+                </label>
+                
+                <label style="display: block; margin-bottom: 10px;">
+                    <strong>Target Finish Time (hours):</strong>
+                    <input type="number" id="targetTime" min="1" step="0.5" value="24" style="width: 100%; margin-top: 5px; padding: 8px;">
+                </label>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+                <button class="btn-confirm" onclick="loadRaceTemplate()">Load Template</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// Load race template and populate legs
+function loadRaceTemplate() {
+    const raceIndex = parseInt(document.getElementById('raceSelect').value);
+    const targetTime = parseFloat(document.getElementById('targetTime').value);
+    
+    if (!targetTime || targetTime <= 0) {
+        alert('Please enter a valid target finish time');
+        return;
+    }
+    
+    const race = raceTemplates[raceIndex];
+    const avgPace = targetTime / race.distance; // hours per km/mile
+    
+    // Create legs from aid stations
+    legs = [];
+    for (let i = 0; i < race.aidStations.length - 1; i++) {
+        const start = race.aidStations[i];
+        const end = race.aidStations[i + 1];
+        const legDistance = end.distance - start.distance;
+        const legDuration = legDistance * avgPace;
+        
+        legs.push({
+            name: end.name, // Just show the destination checkpoint name
+            duration: Math.round(legDuration * 10) / 10, // Round to 1 decimal
+            distance: Math.round(legDistance * 10) / 10, // Round to 1 decimal
+            dropBag: end.dropBag || false, // Include drop bag info from destination
+            fuelPlan: []
+        });
+    }
+    
+    // Set active leg and fuel plan
+    activeLegIndex = 0;
+    fuelPlan = legs[activeLegIndex].fuelPlan;
+    
+    // Close modal
+    document.querySelector('.modal-overlay').remove();
+    
+    // Render updated UI
     renderLegsConfig();
     renderLegsFuelPlan();
     updateTotalDuration();
@@ -247,6 +466,14 @@ function renderLegsConfig() {
                            placeholder="Optional"
                            class="leg-config-input">
                 </div>
+                <div class="leg-config-field">
+                    <label class="leg-config-label drop-bag-label ${leg.dropBag ? 'active' : ''}" style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                        <input type="checkbox" ${leg.dropBag ? 'checked' : ''} 
+                               onchange="updateLegProperty(${index}, 'dropBag', this.checked)"
+                               style="cursor: pointer;">
+                        <i class="fa-solid fa-bag-shopping"></i> Drop Bag
+                    </label>
+                </div>
                 <div class="leg-config-controls">
                     <button class="btn-small btn-danger" onclick="removeLeg(${index})" title="Delete">
                         <i class="fa-solid fa-trash"></i>
@@ -309,6 +536,7 @@ function renderLegsFuelPlan() {
                 <div class="leg-fuel-title">
                     <span class="leg-name">${leg.name}</span>
                     <span class="leg-meta">(${leg.duration}h${leg.distance ? `, ${leg.distance}km` : ''})</span>
+                    ${leg.dropBag ? '<span class="drop-bag-badge-inline" title="Drop bag available"><i class="fa-solid fa-bag-shopping"></i> Drop Bag</span>' : ''}
                     ${index === activeLegIndex ? '<span class="leg-active-badge"><i class="fa-solid fa-check-circle"></i> Active</span>' : ''}
                 </div>
                 <div class="leg-controls">
@@ -855,7 +1083,12 @@ function renderProducts() {
         const searchLower = searchQuery.toLowerCase();
         const brandMatch = product.brand ? product.brand.toLowerCase().includes(searchLower) : false;
         const nameMatch = product.name.toLowerCase().includes(searchLower);
-        return brandMatch || nameMatch;
+        const searchMatch = brandMatch || nameMatch;
+        
+        // Apply brand filter - if no brands selected, show all
+        const brandFilterMatch = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
+        
+        return searchMatch && brandFilterMatch;
     });
     
     // Sort: favorites first, then by brand, then by name
@@ -1138,9 +1371,9 @@ function displayWarnings(actualCarbs, actualSodium, targetCarbs, targetSodium, t
     if (targetCarbs > 0) {
         const carbsPercentage = (actualCarbs / targetCarbs) * 100;
         if (carbsPercentage > 105) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your carb intake is ${carbsPercentage.toFixed(0)}% of your target (${(carbsPercentage - 100).toFixed(0)}% over). This may cause GI distress.`);
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #ff6b6b;"></i> Your carb intake is ${carbsPercentage.toFixed(0)}% of your target (${(carbsPercentage - 100).toFixed(0)}% over). This may cause GI distress.`);
         } else if (carbsPercentage < 80) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your carb intake is ${carbsPercentage.toFixed(0)}% of your target. Consider adding more fuel to meet your goals.`);
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #FFD43B;"></i> Your carb intake is ${carbsPercentage.toFixed(0)}% of your target. Consider adding more fuel to meet your goals.`);
         } else if (carbsPercentage >= 95 && carbsPercentage <= 105) {
             successes.push(`✓ Carb intake is right on target!`);
         }
@@ -1150,9 +1383,9 @@ function displayWarnings(actualCarbs, actualSodium, targetCarbs, targetSodium, t
     if (targetSodium > 0) {
         const sodiumPercentage = (actualSodium / targetSodium) * 100;
         if (sodiumPercentage > 105) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your sodium intake is ${sodiumPercentage.toFixed(0)}% of your target (${(sodiumPercentage - 100).toFixed(0)}% over). This may cause bloating or excess thirst.`);
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #ff6b6b;"></i> Your sodium intake is ${sodiumPercentage.toFixed(0)}% of your target (${(sodiumPercentage - 100).toFixed(0)}% over). This may cause bloating or excess thirst.`);
         } else if (sodiumPercentage < 70) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your sodium intake is ${sodiumPercentage.toFixed(0)}% of your target. Low sodium can lead to cramping and hyponatremia.`);
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #FFD43B;"></i> Your sodium intake is ${sodiumPercentage.toFixed(0)}% of your target. Low sodium can lead to cramping and hyponatremia.`);
         } else if (sodiumPercentage >= 90 && sodiumPercentage <= 110) {
             successes.push(`✓ Sodium intake looks good!`);
         }
@@ -1165,9 +1398,9 @@ function displayWarnings(actualCarbs, actualSodium, targetCarbs, targetSodium, t
         const caffeinePercentage = targetTotalCaffeine > 0 ? (totalCaffeine / targetTotalCaffeine) * 100 : 0;
         
         if (targetTotalCaffeine > 0 && caffeinePercentage > 105) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your caffeine is ${caffeinePercentage.toFixed(0)}% of your target (${(caffeinePercentage - 100).toFixed(0)}% over). Too much caffeine may cause jitters or GI issues.`);
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #ff6b6b;"></i> Your caffeine is ${caffeinePercentage.toFixed(0)}% of your target (${(caffeinePercentage - 100).toFixed(0)}% over). Too much caffeine may cause jitters or GI issues.`);
         } else if (targetTotalCaffeine > 0 && caffeinePercentage < 80) {
-            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #856404;"></i> Your caffeine is ${caffeinePercentage.toFixed(0)}% of your target. You may want to add caffeinated products.`);
+            warnings.push(`<i class="fa-solid fa-triangle-exclamation" style="color: #FFD43B;"></i> Your caffeine is ${caffeinePercentage.toFixed(0)}% of your target. You may want to add caffeinated products.`);
         } else if (caffeinePercentage >= 95 && caffeinePercentage <= 105) {
             successes.push(`✓ Caffeine strategy is on target!`);
         }
