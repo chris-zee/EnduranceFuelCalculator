@@ -65,14 +65,24 @@
 
             <div id="multiLegSettings" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 6px; border: 2px solid #6610f2;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="margin: 0; color: #333; font-size: 1.1em;"><i class="fa-solid fa-route"></i> Leg Configuration</h3>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <h3 style="margin: 0; color: #333; font-size: 1.1em;"><i class="fa-solid fa-route"></i> Leg Configuration</h3>
+                        <span class="help-icon" title="Split times are calculated based on average pace and do not account for elevation or terrain variation. You may need to adjust individual leg times based on your race strategy and course profile.">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </span>
+                    </div>
                     <button onclick="toggleMultiLegPlanning()" class="btn-small btn-danger">Disable</button>
                 </div>
                 <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Set up your event legs here, then drag fuel between them in the fuel plan section below.</p>
                 <div id="legsConfigContainer"></div>
-                <button onclick="addLeg()" style="width: 100%; margin-top: 10px; background: #6610f2;">
-                    <i class="fa-solid fa-plus"></i> Add Leg
-                </button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                    <button onclick="addLeg()" style="background: #6610f2;">
+                        <i class="fa-solid fa-plus"></i> Add Leg
+                    </button>
+                    <button onclick="showRaceTemplateModal()" class="primaryButton">
+                        <i class="fa-solid fa-map"></i> Load Race Template
+                    </button>
+                </div>
             </div>
 
             <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 6px;">
@@ -87,17 +97,29 @@
         <div class="section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; cursor: pointer;" onclick="toggleProductsSection()">
                 <h2 style="margin: 0;">Available Fuel Products</h2>
-                <span id="productsSectionToggle" style="font-size: 1.5em; color: #09ACEC;"><i class="fa-solid fa-chevron-down"></i></span>
+                <span id="productsSectionToggle" style="font-size: 1.5em; color: #667eea;"><i class="fa-solid fa-chevron-down"></i></span>
             </div>
             
             <div id="productsSection">
-                <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;" class="search-favorites-row">
                     <div style="flex: 1; position: relative;">
                         <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #999;"></i>
                         <input type="text" id="productSearch" placeholder="Search products..." style="width: 100%; padding-left: 40px;">
                     </div>
-                    <div style="color: #666; font-size: 0.9em;">
+                    <div style="color: #666; font-size: 0.9em; white-space: nowrap;" class="favorites-hint">
                         <i class="fa-solid fa-star" style="color: #FFD43B;"></i> Click star to favorite
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <div class="brand-multiselect-container">
+                        <div class="brand-multiselect-input" id="brandMultiselectInput" onclick="toggleBrandDropdown()">
+                            <div class="brand-pills-display" id="brandPillsDisplay">
+                                <span class="placeholder-text">Filter by brand...</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <div class="brand-dropdown" id="brandDropdown" style="display: none;"></div>
                     </div>
                 </div>
                 
@@ -122,7 +144,7 @@
                         <input type="number" id="customSodium" placeholder="Sodium (mg)" min="0">
                         <input type="number" id="customPotassium" placeholder="Potassium (mg)" min="0">
                         <input type="number" id="customCaffeine" placeholder="Caffeine (mg)" min="0">
-                        <button onclick="addCustomProduct()" class="btn-small">Add Product</button>
+                        <button onclick="addCustomProduct()" class="btn-small primaryButton">Add Product</button>
                     </div>
                 </div>
             </div>
@@ -188,6 +210,37 @@
             </div>
         </div>
     </div>
+
+    <div class="disclaimer-section">
+        <div class="disclaimer-content">
+            <strong>Disclaimer:</strong> This tool is for planning purposes only. Nutritional needs vary by individual, conditions, and effort level. Always consult with healthcare professionals and follow race-specific guidelines. The calculator does not replace professional medical or nutritional advice.
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            
+            <div class="footer-buttons">
+                <a href="https://forms.gle/bUmMyAnxnuEWa2gSA" class="footer-btn" id="reportIssueBtn">
+                    <i class="fa-solid fa-bug"></i> Report an Issue
+                </a>
+                <!--<a href="#" class="footer-btn" id="requestFuelRaceBtn">
+                    <i class="fa-solid fa-plus-circle"></i> Request Fuel/Race
+                </a>-->
+            </div>
+            
+            
+            <div class="footer-links">
+                <a href="terms.html" target="_blank">Terms of Use</a>
+                <span>•</span>
+                <a href="privacy.html" target="_blank">Privacy Policy</a>
+            </div>
+            
+            <div class="footer-copyright">
+                © 2026 Endurance Fuel Planner. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
