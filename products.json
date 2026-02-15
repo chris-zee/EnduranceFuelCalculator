@@ -35,40 +35,35 @@
     "brand": "Maurten",
     "name": "Gel 100",
     "carbs": 25,
-    "sodium": 42,
-    "potassium": 10,
+    "sodium": 20,
     "caffeine": 0
   },
   {
     "brand": "Maurten",
     "name": "Gel 100 CAF 100",
     "carbs": 25,
-    "sodium": 42,
-    "potassium": 10,
+    "sodium": 22,
     "caffeine": 100
   },
   {
     "brand": "Maurten",
     "name": "Drink Mix 320",
-    "carbs": 79,
-    "sodium": 115,
-    "potassium": 12,
+    "carbs": 78,
+    "sodium": 245,
     "caffeine": 0
   },
   {
     "brand": "Maurten",
     "name": "Drink Mix 160",
     "carbs": 39,
-    "sodium": 57,
-    "potassium": 6,
+    "sodium": 210,
     "caffeine": 0
   },
   {
     "brand": "Maurten",
     "name": "Solid 225",
     "carbs": 40,
-    "sodium": 75,
-    "potassium": 15,
+    "sodium": 240,
     "caffeine": 0
   },
   {
@@ -360,4 +355,5 @@
     "caffeine": 0
   }
 ]
+
 
