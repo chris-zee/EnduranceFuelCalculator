@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -223,8 +224,24 @@ button:hover {
     background: #132C53;
 }
 
+
+.secondaryButton {
+    background: #1A3C73;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.3s;
+}
+
+.secondaryButton:hover {
+    background: #132C53;
+}
+
 .btn-small {
-    padding: 5px 10px;
+    padding: 10px 12px;
     font-size: 0.85em;
 }
 
@@ -552,6 +569,9 @@ button:hover {
 .leg-config-name {
     flex: 1;
     min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .leg-config-input {
@@ -566,7 +586,14 @@ button:hover {
 }
 
 .leg-config-field {
-    width: 120px;
+    width: 100px;
+}
+
+.leg-button-field {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .leg-config-label {
@@ -632,6 +659,31 @@ button:hover {
     padding: 3px 8px;
     background: #ffc107;
     color: #333;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.support-crew-label {
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.support-crew-label.active {
+    background: #17a2b8;
+    color: #fff;
+    font-weight: 600;
+}
+
+.support-crew-badge-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: #17a2b8;
+    color: #fff;
     border-radius: 4px;
     font-size: 0.8em;
     font-weight: 600;
@@ -762,7 +814,7 @@ button:hover {
 }
 
 .btn-confirm {
-    background: #56CBF9;
+    background: #132C53;
 }
 
 /* Fuel Item Styles */
