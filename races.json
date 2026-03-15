@@ -73,7 +73,7 @@
   },
   {
     "name": "Noosa Ultra-Trail - Out’N’Back 50km",
-    "distance": 25,
+    "distance": 50,
     "unit": "km",
     "aidStations": [
       {"name": "Noosa District Sports Complex (Start)", "distance": 0, "dropBag": false},
