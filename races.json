@@ -59,5 +59,30 @@
       {"name": "Emergency Aid Station", "distance": 13.1, "dropBag": false},
       {"name": "Scenic World (Finish)", "distance": 21.7, "dropBag": true}
     ]
+  },
+   {
+    "name": "Noosa Ultra-Trail - Cross Country 25km",
+    "distance": 25,
+    "unit": "km",
+    "aidStations": [
+      {"name": "Twin Hill Views Lookout", "distance": 0, "dropBag": false},
+      {"name": "Lake MacDonald", "distance": 11, "dropBag": false},
+      {"name": "Water Point", "distance": 17, "dropBag": false}
+      {"name": "Noosa District Sports Complex (Finish)", "distance": 25, "dropBag": false}
+    ]
+  },
+  {
+    "name": "Noosa Ultra-Trail - Out’N’Back 50km",
+    "distance": 25,
+    "unit": "km",
+    "aidStations": [
+      {"name": "Noosa District Sports Complex (Start)", "distance": 0, "dropBag": false},
+      {"name": "Mt Tinbeerwah", "distance": 6, "dropBag": false},
+      {"name": "Water Point", "distance": 14, "dropBag": false}
+      {"name": "Twin Hill Views Lookout", "distance": 23, "dropBag": true},
+      {"name": "Lake MacDonald", "distance": 36, "dropBag": false},
+      {"name": "Water Point", "distance": 42, "dropBag": false}
+      {"name": "Noosa District Sports Complex (Finish)", "distance": 50, "dropBag": false}
+    ]
   }
 ]
