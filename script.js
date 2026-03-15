@@ -273,6 +273,7 @@ function addLeg() {
         duration: 2,
         distance: null,
         dropBag: false,
+        supportCrew: false,
         fuelPlan: []
     });
     renderLegsConfig();
@@ -298,44 +299,69 @@ function removeLeg(index) {
     updateSummary();
 }
 
+// Get unique events from race templates
+function getRaceEvents() {
+    return [...new Set(raceTemplates.map(r => r.event))];
+}
+
+// Update race dropdown when event selection changes
+function updateRaceDropdown() {
+    const event = document.getElementById('eventSelect').value;
+    const raceSelect = document.getElementById('raceSelect');
+    const races = raceTemplates.filter(r => r.event === event);
+    raceSelect.innerHTML = races.map(race =>
+        `<option value="${raceTemplates.indexOf(race)}">${race.race} (${race.distance}${race.unit})</option>`
+    ).join('');
+}
+
 // Show race template modal
 function showRaceTemplateModal() {
     if (raceTemplates.length === 0) {
         alert('No race templates available');
         return;
     }
-    
+
+    const events = getRaceEvents();
+    const firstEventRaces = raceTemplates.filter(r => r.event === events[0]);
+
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
     modal.innerHTML = `
         <div class="modal-content">
             <h3 class="modal-title">Load Race Template</h3>
-            <p class="modal-description">Select a race and enter your target finish time to auto-populate legs with aid stations.</p>
+            <p class="modal-description">Select an event and race to auto-populate legs with aid stations.</p>
             <p class="modal-helper-text">Split times are calculated based on average pace and do not account for elevation or terrain variation. You may need to adjust individual leg times based on your race strategy and course profile.</p>
-            
+
             <div class="modal-options">
+                <label style="display: block; margin-bottom: 10px;">
+                    <strong>Select Event:</strong>
+                    <select id="eventSelect" style="width: 100%; margin-top: 5px; padding: 8px;" onchange="updateRaceDropdown()">
+                        ${events.map(e => `<option value="${e}">${e}</option>`).join('')}
+                    </select>
+                </label>
+
                 <label style="display: block; margin-bottom: 10px;">
                     <strong>Select Race:</strong>
                     <select id="raceSelect" style="width: 100%; margin-top: 5px; padding: 8px;">
-                        ${raceTemplates.map((race, i) => 
-                            `<option value="${i}">${race.name} (${race.distance}${race.unit})</option>`
+                        ${firstEventRaces.map(race =>
+                            `<option value="${raceTemplates.indexOf(race)}">${race.race} (${race.distance}${race.unit})</option>`
                         ).join('')}
                     </select>
                 </label>
-                
+
                 <label style="display: block; margin-bottom: 10px;">
                     <strong>Target Finish Time (hours):</strong>
-                    <input type="number" id="targetTime" min="1" step="0.5" value="24" style="width: 100%; margin-top: 5px; padding: 8px;">
+                    <input type="number" id="targetTime" min="1" step="0.5" value="0" style="width: 100%; margin-top: 5px; padding: 8px;">
                 </label>
             </div>
-            
+
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
                 <button class="btn-confirm" onclick="loadRaceTemplate()">Load Template</button>
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
 }
 
@@ -343,15 +369,23 @@ function showRaceTemplateModal() {
 function loadRaceTemplate() {
     const raceIndex = parseInt(document.getElementById('raceSelect').value);
     const targetTime = parseFloat(document.getElementById('targetTime').value);
-    
+
     if (!targetTime || targetTime <= 0) {
         alert('Please enter a valid target finish time');
         return;
     }
-    
+
     const race = raceTemplates[raceIndex];
     const avgPace = targetTime / race.distance; // hours per km/mile
-    
+
+    // Enable multi-leg if not already active
+    if (!multiLegEnabled) {
+        multiLegEnabled = true;
+        document.getElementById('multiLegSettings').style.display = 'block';
+        document.getElementById('multiLegToggleBtn').style.display = 'none';
+        document.getElementById('duration').disabled = true;
+    }
+
     // Create legs from aid stations
     legs = [];
     for (let i = 0; i < race.aidStations.length - 1; i++) {
@@ -359,27 +393,31 @@ function loadRaceTemplate() {
         const end = race.aidStations[i + 1];
         const legDistance = end.distance - start.distance;
         const legDuration = legDistance * avgPace;
-        
+
         legs.push({
-            name: end.name, // Just show the destination checkpoint name
-            duration: Math.round(legDuration * 10) / 10, // Round to 1 decimal
-            distance: Math.round(legDistance * 10) / 10, // Round to 1 decimal
-            dropBag: end.dropBag || false, // Include drop bag info from destination
+            name: end.name,
+            start: start.name,
+            finish: end.name,
+            duration: Math.round(legDuration * 10) / 10,
+            distance: Math.round(legDistance * 10) / 10,
+            dropBag: end.dropBag || false,
+            supportCrew: end.supportCrew || false,
             fuelPlan: []
         });
     }
-    
+
     // Set active leg and fuel plan
     activeLegIndex = 0;
     fuelPlan = legs[activeLegIndex].fuelPlan;
-    
+
     // Close modal
     document.querySelector('.modal-overlay').remove();
-    
+
     // Render updated UI
     renderLegsConfig();
     renderLegsFuelPlan();
     updateTotalDuration();
+    renderProducts();
     updateSummary();
 }
 
@@ -392,6 +430,8 @@ function duplicateLeg(index) {
         name: originalLeg.name + ' (Copy)',
         duration: originalLeg.duration,
         distance: originalLeg.distance,
+        dropBag: originalLeg.dropBag,
+        supportCrew: originalLeg.supportCrew,
         fuelPlan: originalLeg.fuelPlan.map(item => ({
             product: {...item.product},
             quantity: item.quantity
@@ -448,7 +488,8 @@ function renderLegsConfig() {
         <div class="leg-config-card">
             <div class="leg-config-layout">
                 <div class="leg-config-name">
-                    <input type="text" value="${leg.name}" 
+                    <label class="leg-config-label">Aid Station</label>
+                    <input type="text" value="${leg.name}"
                            onchange="updateLegProperty(${index}, 'name', this.value)"
                            placeholder="Leg name"
                            class="leg-config-input">
@@ -466,12 +507,18 @@ function renderLegsConfig() {
                            placeholder="Optional"
                            class="leg-config-input">
                 </div>
-                <div class="leg-config-field">
+                <div class="leg-button-field">
                     <label class="leg-config-label drop-bag-label ${leg.dropBag ? 'active' : ''}" style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-                        <input type="checkbox" ${leg.dropBag ? 'checked' : ''} 
+                        <input type="checkbox" ${leg.dropBag ? 'checked' : ''}
                                onchange="updateLegProperty(${index}, 'dropBag', this.checked)"
                                style="cursor: pointer;">
                         <i class="fa-solid fa-bag-shopping"></i> Drop Bag
+                    </label>
+                    <label class="leg-config-label support-crew-label ${leg.supportCrew ? 'active' : ''}" style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                        <input type="checkbox" ${leg.supportCrew ? 'checked' : ''}
+                               onchange="updateLegProperty(${index}, 'supportCrew', this.checked)"
+                               style="cursor: pointer;">
+                        <i class="fa-solid fa-people-group"></i> Support Crew
                     </label>
                 </div>
                 <div class="leg-config-controls">
@@ -534,9 +581,10 @@ function renderLegsFuelPlan() {
              style="cursor: pointer;">
             <div class="leg-fuel-header">
                 <div class="leg-fuel-title">
-                    <span class="leg-name">${leg.name}</span>
+                    <span class="leg-name">${index === 0 ? 'Start' : legs[index - 1].name} → ${leg.name}</span>
                     <span class="leg-meta">(${leg.duration}h${leg.distance ? `, ${leg.distance}km` : ''})</span>
                     ${leg.dropBag ? '<span class="drop-bag-badge-inline" title="Drop bag available"><i class="fa-solid fa-bag-shopping"></i> Drop Bag</span>' : ''}
+                    ${leg.supportCrew ? '<span class="support-crew-badge-inline" title="Support crew access"><i class="fa-solid fa-people-group"></i> Support Crew</span>' : ''}
                     ${index === activeLegIndex ? '<span class="leg-active-badge"><i class="fa-solid fa-check-circle"></i> Active</span>' : ''}
                 </div>
                 <div class="leg-controls">
@@ -745,7 +793,7 @@ function copyLegFuel(sourceLegIndex) {
     
     // Create options for target legs
     const targetOptions = legs
-        .map((leg, index) => index !== sourceLegIndex ? { index, name: leg.name } : null)
+        .map((leg, index) => index !== sourceLegIndex ? { index, name: `${index === 0 ? 'Start' : legs[index - 1].name} → ${leg.name}` } : null)
         .filter(Boolean);
     
     if (targetOptions.length === 0) {
@@ -761,7 +809,7 @@ function copyLegFuel(sourceLegIndex) {
     modalContent.className = 'modal-content';
     
     modalContent.innerHTML = `
-        <h3 class="modal-title">Copy Fuel from "${sourceLeg.name}"</h3>
+        <h3 class="modal-title">Copy Fuel from "${sourceLegIndex === 0 ? 'Start' : legs[sourceLegIndex - 1].name} → ${sourceLeg.name}"</h3>
         <p class="modal-description">Select which legs to copy this fuel to:</p>
         <div class="modal-options">
             ${targetOptions.map(target => `
@@ -858,11 +906,13 @@ function downloadFuelPlan() {
         csvContent += `Target Sodium: ${targetSodium}mg/hour\n\n`;
         
         legs.forEach((leg, index) => {
-            csvContent += `\n=== ${leg.name} ===\n`;
+            csvContent += `\n=== ${index === 0 ? 'Start' : legs[index - 1].name} → ${leg.name} ===\n`;
             csvContent += `Duration: ${leg.duration} hours\n`;
             if (leg.distance) {
                 csvContent += `Distance: ${leg.distance} kilometers\n`;
             }
+            if (leg.dropBag) csvContent += `Drop Bag: Yes\n`;
+            if (leg.supportCrew) csvContent += `Support Crew: Yes\n`;
             csvContent += '\nProduct,Quantity,Carbs (g),Sodium (mg),Potassium (mg),Caffeine (mg)\n';
             
             if (leg.fuelPlan.length === 0) {
