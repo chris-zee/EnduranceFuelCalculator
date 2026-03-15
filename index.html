@@ -57,13 +57,16 @@
                 </div>
             </div>
 
-            <div style="margin-top: 15px;">
-                <button onclick="toggleMultiLegPlanning()" id="multiLegToggleBtn" style="width: 100%; background: #6610f2;">
+            <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
+                <button onclick="toggleMultiLegPlanning()" id="multiLegToggleBtn" class="secondaryButton" style="width: 100%;">
                     <i class="fa-solid fa-route"></i> Enable Multi-Leg Planning
+                </button>
+                <button onclick="showRaceTemplateModal()" id="raceTemplateBtn" class="primaryButton" style="width: 100%;">
+                    <i class="fa-solid fa-map"></i> Load Race Template
                 </button>
             </div>
 
-            <div id="multiLegSettings" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 6px; border: 2px solid #6610f2;">
+            <div id="multiLegSettings" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 6px; border: 2px solid #56CBF9;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <h3 style="margin: 0; color: #333; font-size: 1.1em;"><i class="fa-solid fa-route"></i> Leg Configuration</h3>
@@ -75,12 +78,9 @@
                 </div>
                 <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Set up your event legs here, then drag fuel between them in the fuel plan section below.</p>
                 <div id="legsConfigContainer"></div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
-                    <button onclick="addLeg()" style="background: #6610f2;">
+                <div style="margin-top: 10px;">
+                    <button onclick="addLeg()" class="secondaryButton" style="width: 100%;">
                         <i class="fa-solid fa-plus"></i> Add Leg
-                    </button>
-                    <button onclick="showRaceTemplateModal()" class="primaryButton">
-                        <i class="fa-solid fa-map"></i> Load Race Template
                     </button>
                 </div>
             </div>
@@ -97,7 +97,7 @@
         <div class="section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; cursor: pointer;" onclick="toggleProductsSection()">
                 <h2 style="margin: 0;">Available Fuel Products</h2>
-                <span id="productsSectionToggle" style="font-size: 1.5em; color: #667eea;"><i class="fa-solid fa-chevron-down"></i></span>
+                <span id="productsSectionToggle" style="font-size: 1.5em; color: #56CBF9;"><i class="fa-solid fa-chevron-down"></i></span>
             </div>
             
             <div id="productsSection">
