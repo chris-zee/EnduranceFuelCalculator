@@ -67,7 +67,7 @@
     "aidStations": [
       {"name": "Twin Hill Views Lookout", "distance": 0, "dropBag": false},
       {"name": "Lake MacDonald", "distance": 11, "dropBag": false},
-      {"name": "Water Point", "distance": 17, "dropBag": false}
+      {"name": "Water Point", "distance": 17, "dropBag": false},
       {"name": "Noosa District Sports Complex (Finish)", "distance": 25, "dropBag": false}
     ]
   },
@@ -78,10 +78,10 @@
     "aidStations": [
       {"name": "Noosa District Sports Complex (Start)", "distance": 0, "dropBag": false},
       {"name": "Mt Tinbeerwah", "distance": 6, "dropBag": false},
-      {"name": "Water Point", "distance": 14, "dropBag": false}
+      {"name": "Water Point", "distance": 14, "dropBag": false},
       {"name": "Twin Hill Views Lookout", "distance": 23, "dropBag": true},
       {"name": "Lake MacDonald", "distance": 36, "dropBag": false},
-      {"name": "Water Point", "distance": 42, "dropBag": false}
+      {"name": "Water Point", "distance": 42, "dropBag": false},
       {"name": "Noosa District Sports Complex (Finish)", "distance": 50, "dropBag": false}
     ]
   }
