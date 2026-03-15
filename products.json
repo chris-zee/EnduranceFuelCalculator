@@ -35,35 +35,40 @@
     "brand": "Maurten",
     "name": "Gel 100",
     "carbs": 25,
-    "sodium": 20,
+    "sodium": 42,
+    "potassium": 10,
     "caffeine": 0
   },
   {
     "brand": "Maurten",
     "name": "Gel 100 CAF 100",
     "carbs": 25,
-    "sodium": 22,
+    "sodium": 42,
+    "potassium": 10,
     "caffeine": 100
   },
   {
     "brand": "Maurten",
     "name": "Drink Mix 320",
-    "carbs": 78,
-    "sodium": 245,
+    "carbs": 79,
+    "sodium": 115,
+    "potassium": 12,
     "caffeine": 0
   },
   {
     "brand": "Maurten",
     "name": "Drink Mix 160",
     "carbs": 39,
-    "sodium": 210,
+    "sodium": 57,
+    "potassium": 6,
     "caffeine": 0
   },
   {
     "brand": "Maurten",
     "name": "Solid 225",
     "carbs": 40,
-    "sodium": 240,
+    "sodium": 75,
+    "potassium": 15,
     "caffeine": 0
   },
   {
@@ -156,7 +161,7 @@
   },
   {
     "brand": "Tailwind",
-    "name": "Endurance Fuel (27g scoop)",
+    "name": "Endurance Fuel (1 scoop)",
     "carbs": 25,
     "sodium": 115,
     "potassium": 45,
@@ -164,7 +169,7 @@
   },
   {
     "brand": "Tailwind",
-    "name": "Endurance Fuel Caffeinated (27g scoop)",
+    "name": "Endurance Fuel Caffeinated (1 scoop)",
     "carbs": 25,
     "sodium": 115,
     "potassium": 45,
@@ -172,7 +177,7 @@
   },
   {
     "brand": "Tailwind",
-    "name": "Rebuild Recovery (27g scoop)",
+    "name": "Rebuild Recovery (1 scoop)",
     "carbs": 25,
     "sodium": 125,
     "potassium": 95,
@@ -184,22 +189,6 @@
     "carbs": 24,
     "sodium": 50,
     "potassium": 15,
-    "caffeine": 0
-  },
-  {
-    "brand": "Trail Brew",
-    "name": "Blood Orange + Caffeine",
-    "carbs": 44,
-    "sodium": 798,
-    "potassium": 195,
-    "caffeine": 60
-  },
-    {
-    "brand": "Trail Brew",
-    "name": "Energy + Electrolytes",
-    "carbs": 44,
-    "sodium": 798,
-    "potassium": 195,
     "caffeine": 0
   },
   {
@@ -353,7 +342,61 @@
     "sodium": 50,
     "potassium": 25,
     "caffeine": 0
+  },
+  {
+    "brand": "Whole Food",
+    "name": "Queen Pure Canadian Maple Syrup - 35ml",
+    "carbs": 31.5,
+    "sodium": 6,
+    "potassium": 0,
+    "caffeine": 0
+  },
+  {
+    "brand": "Winners",
+    "name": "Berry Burst Energy Gel",
+    "carbs": 28.8,
+    "sodium": 36,
+    "potassium": 16,
+    "caffeine": 0
+  },
+  {
+    "brand": "Untapped",
+    "name": "Maple Energy Gel",
+    "carbs": 26,
+    "sodium": 5,
+    "potassium": 82,
+    "caffeine": 0
+  },
+  {
+    "brand": "Untapped",
+    "name": "Salted Raspberry Energy Gel",
+    "carbs": 26,
+    "sodium": 60,
+    "potassium": 100,
+    "caffeine": 0
+  },
+  {
+    "brand": "Untapped",
+    "name": "Salted Cocoa Energy Gel",
+    "carbs": 26,
+    "sodium": 60,
+    "potassium": 85,
+    "caffeine": 0
+  },
+  {
+    "brand": "Untapped",
+    "name": "Salted Citrus Energy Gel",
+    "carbs": 26,
+    "sodium": 100,
+    "potassium": 85,
+    "caffeine": 0
+  },  
+  {
+    "brand": "Untapped",
+    "name": "Coffee Energy Gel (with Caffeine)",
+    "carbs": 26,
+    "sodium": 11,
+    "potassium": 80,
+    "caffeine": 27
   }
 ]
-
-
